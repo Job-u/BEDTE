@@ -1,7 +1,7 @@
 <?php 
    session_start();
 
-   include("phpsql/config.php");
+   include("../phpsql/config.php");
    if(!isset($_SESSION['valid'])){
     header("Location: login.php");
    }
@@ -12,18 +12,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../style/style.css">
     <title>Change Profile</title>
 </head>
 <body>
     <div class="nav">
         <div class="logo">
-            <p><a href="home.php"> Logo</a></p>
+            <p><a href="../userdashboard/userdashboard.php"> Logo</a></p>
         </div>
 
         <div class="right-links">
             <a href="#">Change Profile</a>
-            <a href="phpsql/logout.php"> <button class="btn">Log Out</button> </a>
+            <a href="../phpsql/logout.php"> <button class="btn">Log Out</button> </a>
         </div>
     </div>
     <div class="container">
@@ -42,7 +42,7 @@
                     echo "<div class='message'>
                     <p>Profile Updated!</p>
                 </div> <br>";
-              echo "<a href='home.php'><button class='btn'>Go Home</button>";
+              echo "<a href='../userdashboard/userdashboard.php'><button class='btn'>Go Home</button>";
        
                 }
                }else{
