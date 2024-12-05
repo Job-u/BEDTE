@@ -18,7 +18,7 @@
 <body>
     <div class="nav">
         <div class="logo">
-            <p><a href="../userdashboard/userdashboard.php"> Logo</a></p>
+            <p><a href="../userdashboard/userdashboard.php"> BEDTE</a></p>
         </div>
 
         <div class="right-links">
@@ -57,6 +57,8 @@
                 }
 
             ?>
+
+            
             <header>Change Profile</header>
             <form action="" method="post">
                 <div class="field input">
