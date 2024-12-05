@@ -26,8 +26,8 @@
     </div>
     <ul class="nav_items" id="nav_links">
             <div class="item">
-        <li><a href="#">The Developers</a></li>
-        <li><a href="#">Contact Us</a></li>
+        <li><a href="../aboutus/aboutus.php">Project Team</a></li>
+        <li><a href="../contact/contact.html">Contact Us</a></li>
             </div>
 
             <?php 
