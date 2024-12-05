@@ -54,13 +54,9 @@ body{
     list-style: none;
     padding: 1em;
 }
-.nav_items li a{
-    text-decoration: none;
-    transition: 0.3s;
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;
-    letter-spacing: 1px;
+.nav_items li{
+    list-style: none;
+    padding: 1em;
 }
 .nav_items li::after{
     content: '';
