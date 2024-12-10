@@ -54,7 +54,7 @@ ScrollReveal().reveal('.left h1', {
 });
 ScrollReveal().reveal('.left p', {
     ...scrollRevealOption,
-    delay: 1000,
+    delay: 1500,
 });
 ScrollReveal().reveal('.main btn', {
     ...scrollRevealOption,
@@ -70,7 +70,7 @@ ScrollReveal().reveal('.top_heading', {
 });
 ScrollReveal().reveal('.heading', {
     ...scrollRevealOption,
-    delay: 500,
+    delay: 1000,
 });
 ScrollReveal().reveal('.para', {
     ...scrollRevealOption,
