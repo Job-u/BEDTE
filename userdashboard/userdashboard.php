@@ -53,7 +53,6 @@
         <i class="ri-menu-line"></i>
     </div>
 </nav>
-
 </section>
 
 <section class="sec" id="features">
@@ -65,7 +64,7 @@
 </div>
 
 <div class="box">
-    <a href="" class="box-link">
+    <a href="../game/gamemode.html" class="box-link">
         <div class="boxes">
         <i class="ri-gamepad-line"></i>
             <h1>Play Game</h1>
