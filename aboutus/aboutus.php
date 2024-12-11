@@ -171,6 +171,4 @@
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../js/homepage.js"></script>
 </body>
-
-
 </html>
