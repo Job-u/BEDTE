@@ -5,7 +5,7 @@
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
     margin: 0%; /* Removes default margin for all elements */
     padding: 0%; /* Removes default padding for all elements */
-    text-decoration: none;
+    text-decoration: none;  
 }
 
 body {

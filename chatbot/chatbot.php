@@ -14,20 +14,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BEDTE Chatbot</title>
-   <a href="#"><link rel="stylesheet" href="../style/chatbot.css"></a>
+   <link rel="stylesheet" href="../style/chatbot.css">
 </head>
 <body>
 
-    <nav class="navbar">
+<nav class="navbar">
         <a href="../userdashboard/userdashboard.php"><div class="logo">
             <img src="../img/LOGO.png" alt="">
             <span>BEDTE</span>
-        </div>
+        </div></a>
         <ul class="nav_items" id="nav_links">
                 <div class="item">
-            <li><a href="../aboutus/aboutus.php">Project Team</a></li>
+            <li><a href="../aboutus/aboutus.html">Project Team</a></li>
             <li><a href="../contact/contact.html">Contact Us</a></li>
-                </div></a>
+                </div>
     
                 <?php 
                 
@@ -52,7 +52,8 @@
             <i class="ri-menu-line"></i>
         </div>
     </nav>
-    
+
+
     <div class="chat-container">
         <div class="chat-header">
             <h1>BEDTE Chatbot</h1>
@@ -67,5 +68,6 @@
     <script src="../js/chatbot.js"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../js/homepage.js"></script>
+
 </body>
 </html>

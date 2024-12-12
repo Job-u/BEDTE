@@ -7,7 +7,6 @@
    }
 ?>
 
-
 <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -22,8 +21,8 @@
     
         <main class="main">
             <header class="header">
-                <nav class="navbar">
-                    <a href="../userdashboard/userdashboard.php"><div class="logo">
+                <a href="../userdashboard/userdashboard.php"><nav class="navbar">
+                    <div class="logo">
                         <img src="../img/LOGO.png" alt="">
                         <span>BEDTE</span>
                     </div></a>
@@ -124,7 +123,7 @@
     
     
     <script src="../js/gamequestion.js"></script>
-    <script src="../js/gamescript.js"></script>
+    <script src="../js/game.js"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../js/homepage.js"></script>
     </body>

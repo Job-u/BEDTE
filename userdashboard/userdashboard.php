@@ -52,8 +52,8 @@
     <div class="nav_menu" id="menu_btn">
         <i class="ri-menu-line"></i>
     </div>
-</nav>
-</section>
+    </nav>
+    </section>
 
 <section class="sec" id="features">
     <div class="left">
