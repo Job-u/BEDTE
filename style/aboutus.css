@@ -1,0 +1,395 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+* {
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    margin: 0%; /* Removes default margin for all elements */
+    padding: 0%; /* Removes default padding for all elements */
+    text-transform: capitalize; /* Capitalizes the first letter of every word for all text */
+    text-decoration: none;
+}
+
+body {
+    background-color: #E4F9F5; /* Sets a soft teal color as the background */
+    color: #000; /* Sets the text color to black */
+    font-family: "Varela Round", sans-serif; /* Applies the 'Varela Round' font and a sans-serif fallback */
+}
+
+.background {
+    position: relative; /* Positions the element relative to its normal position */
+    background: linear-gradient(90deg, #30E3CA 35%, #E4F9F5 100%); /* Applies a gradient background from teal to white */
+}
+
+.logo {
+    font-size: 2em; /* Sets the font size of the logo text */
+    font-weight: 600; /* Makes the logo text bold */
+    flex: 1; /* Ensures the logo occupies all available space in its flex container */
+    color: #E4F9F5; /* Sets the text color of the logo to match the lighter gradient background */
+    display: flex; /* Makes the logo a flex container for child elements (e.g., an image) */
+    align-items: center; /* Vertically centers the child elements within the logo container */
+    
+}
+
+.logo img {
+    width: 70px; /* Sets the logo image's width to 70 pixels */
+    margin-right: 1%; /* Adds space to the right of the logo image */
+}
+
+.navbar {
+    width: 100%; /* Makes the navbar span the full width of the page */
+    margin: auto; /* Centers the navbar horizontally within its container */
+    padding: 2rem; /* Adds padding inside the navbar for spacing */
+    display: flex; /* Enables flexbox layout for easier alignment of child elements */
+    justify-content: space-between; /* Places child elements at both ends with space in between */
+    align-items: center; /* Vertically centers the child elements within the navbar */
+    z-index: 1; /* Ensures the navbar appears on top of other elements */
+    top: 0; /* Fixes the navbar to the top of the page */
+    position: fixed; /* Keeps the navbar in place when scrolling */
+    background-color: #30E3CA;
+}
+.navbar.scrolled {
+    background-color: #30E3CA; /* Changes the navbar background color to a light teal when scrolled */
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px; /* Adds a subtle shadow for depth, simulating an elevated effect */
+}
+.nav_items {
+    display: flex; /* Sets the container as a flexbox for flexible layout */
+    justify-content: space-between; /* Distributes space evenly between child items */
+    align-items: center; /* Aligns child items vertically in the center */
+    font-size: 1.3em;
+}
+
+.item {
+    display: flex; /* Makes the container for individual items a flexbox */
+    justify-content: center; /* Centers the child items horizontally within the container */
+}
+
+.nav_items li {
+    list-style: none; /* Removes the default bullet points for list items */
+    padding: 1em; /* Adds space around each list item for better spacing */
+}
+
+.nav_items li a {
+    text-decoration: none; /* Removes the default underline from the links */
+    transition: 0.3s; /* Adds a smooth transition effect for hover or focus changes */
+    font-size: 16px; /* Sets the font size for the link text */
+    font-weight: 600; /* Makes the link text slightly bold for better readability */
+    color: #000; /* Sets the link text color to black */
+    letter-spacing: 1px; /* Adds spacing between letters for improved typography */
+}
+.nav_items li::after {
+    content: ''; /* Adds an empty pseudo-element after each list item */
+    width: 0; /* Initial width of the pseudo-element is set to 0 */
+    height: 2px; /* Sets the height of the pseudo-element as a thin line */
+    background: #40514E; /* Sets the color of the pseudo-element to dark teal */
+    display: block; /* Forces the pseudo-element to behave like a block-level element */
+    margin: auto; /* Centers the pseudo-element horizontally under the text */
+    transition: 0.5s; /* Adds a smooth animation effect for width changes */
+}
+
+.nav_items li:hover::after {
+    width: 100%; /* Expands the pseudo-element to full width when the list item is hovered */
+}
+
+.nav_btn {
+    flex: 1; /* Makes the container for navigation buttons take up available space in its flex container */
+}
+
+/* All buttons */
+.btn {
+    padding: 12px 15px; /* Adds space inside the button for better sizing */
+    font-size: 18px; /* Sets a larger font size for better readability */
+    letter-spacing: 2px; /* Adds extra spacing between characters for a stylish look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate the button is clickable */
+    margin-left: 12px; /* Adds space between buttons for separation */
+    border: 2px solid #fff; /* Adds a white border around the button */
+    background-color: #257180; /* Sets the background color to a teal shade */
+    color: #fff; /* Sets the button text color to white */
+    transition: all 0.5s ease-out; /* Adds a smooth transition effect for all properties */
+}
+
+/* Logout btn */
+.btn2 {
+    background-color: #0E3663; /* Sets a darker blue background for the second button variant */
+}
+
+/* Logout btn */
+.btn2:hover {
+    background-color: transparent; /* Removes the background color when hovered */
+    color: #40514E; /* Changes the text color to dark teal */
+    border: 2px solid #40514E; /* Changes the border color to dark teal */
+}
+
+/* Hamburger icon*/
+.nav_menu {
+    display: none; /* Hides the navigation menu by default */
+}
+
+.about-section {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.about-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.about-section .subheading {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto 3rem auto;
+}
+
+.team-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.team-member {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 5px solid #E4F9F5;
+}
+
+.team-member h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #118c4f;
+}
+
+.team-member p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.wrapper .title{
+    text-align: center;
+    padding-top: 10rem; /* Increased padding to clear the fixed navbar */
+}
+
+.title h4{
+    display: inline-block;
+    padding: 20px;
+    color: #473829;
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    word-spacing: 5px;
+    border-radius: 15px;
+    text-transform: uppercase;
+    word-wrap: break-word;
+}
+
+.wrapper .card_Container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 40px 0;
+    gap: 20px; /* Added gap for better spacing */
+}
+
+.card_Container .card{
+    position: relative;
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+    box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card .imbBx, .imbBx img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images cover the area without distortion */
+}
+
+.card .content{
+    position: absolute;
+    bottom: -160px;
+    width: 100%;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    backdrop-filter: blur(15px);
+    background-color: rgba(0, 0, 0, 0.4); /* Added a semi-transparent background for readability */
+    box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    transition: bottom 0.5s;
+    transition-delay: 0.65s;
+}
+
+.card:hover .content{
+    bottom: 0;
+    transition-delay: 0s;
+}
+
+.content .contentBx h3{
+    text-transform: uppercase;
+    color: #fff;
+    letter-spacing: 2px;
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+    margin: 20px 0 15px;
+    line-height: 1.1em;
+    transition: 0.5s;
+    transition-delay: 0.6s;
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.card:hover .content .contentBx h3{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content .contentBx h3 span{
+    font-size: 12px;
+    font-weight: 300;
+    text-transform: initial;
+}
+
+.content .sci{
+    position: relative;
+    bottom: 10px;
+    display: flex;
+    padding-left: 0; /* Remove default padding */
+}
+
+.content .sci li{
+    list-style: none;
+    margin: 0 10px;
+    transform: translateY(40px);
+    transition: 0.5s;
+    opacity: 0;
+    transition-delay: calc(0.2s * var(--i));
+}
+
+.card:hover .content .sci li{
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.content .sci li a{
+    color: #fff;
+    font-size: 24px;
+}
+
+@media only screen and (max-width:990px){
+    .left h1{
+        font-size: 2.7em;
+    }
+    .boxes{
+        margin: 0 1em;
+    }
+    .para{
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width:920px){
+    .nav_items{
+        position: absolute;
+        top: -1%;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 5em 0 2em 0;
+        gap: 0.9rem;
+        background-color: #30E3CA;
+        transition: 0.5s;
+        z-index: -1;
+        transform: translateY(-100%);
+    }
+    .nav_btn{
+        display: flex;
+        flex-direction: column;
+    }
+    .nav_btn .btn2{
+        margin-top: 1em;
+    }
+    .nav_items.open{
+        transform: translate(0);
+    }
+    .nav_menu{
+        display: block;
+        font-size: 2em;
+    }
+    .item{
+        flex-direction: column;
+    }
+    .main{
+        width: 95%;
+    }
+    .left h1{
+        font-size: 2em;
+    }
+    .btn{
+        padding: 12px 9px;
+    }
+}
+@media only screen and (max-width:850px){
+
+    .box{
+        grid-template-columns: 1fr;
+    }
+    .box{
+        grid-template-columns: repeat(2, 1fr );
+    }
+    .footer_container{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media only screen and (max-width:580px){
+    .box{
+        grid-template-columns:1fr;
+    }
+    .footer_container{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .boxes{
+        margin: 1em auto;
+    }
+}
+@media only screen and (max-width:435px){
+
+    .sec{
+        padding: 7em 0 2% 0;
+    }
+    .footer_container,.left_box{
+        grid-template-columns: 1fr;
+    }
+}

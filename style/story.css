@@ -1,0 +1,762 @@
+/* --- NAVBAR --- */
+.navbar {
+    width: 100%; /* Makes the navbar span the full width of the page */
+    margin: auto; /* Centers the navbar horizontally within its container */
+    padding: 2rem; /* Adds padding inside the navbar for spacing */
+    display: flex; /* Enables flexbox layout for easier alignment of child elements */
+    justify-content: space-between; /* Places child elements at both ends with space in between */
+    align-items: center; /* Vertically centers the child elements within the navbar */
+    z-index: 1; /* Ensures the navbar appears on top of other elements */
+    top: 0; /* Fixes the navbar to the top of the page */
+    position: fixed; /* Keeps the navbar in place when scrolling */
+    background-color: #30E3CA;
+}
+
+.logo a {
+    text-decoration: none;
+}
+
+.navbar a {
+    text-decoration: none;
+}
+
+.navbar.scrolled {
+    background-color: #30E3CA; /* Changes the navbar background color to a light teal when scrolled */
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px; /* Adds a subtle shadow for depth, simulating an elevated effect */
+}
+
+.logo {
+    font-size: 2em; /* Sets the font size of the logo text */
+    font-weight: 600; /* Makes the logo text bold */
+    flex: 1; /* Ensures the logo occupies all available space in its flex container */
+    color: #E4F9F5; /* Sets the text color of the logo to match the lighter gradient background */
+    display: flex; /* Makes the logo a flex container for child elements (e.g., an image) */
+    align-items: center; /* Vertically centers the child elements within the logo container */
+}
+
+.logo img {
+    width: 70px; /* Sets the logo image's width to 70 pixels */
+    margin-right: 1%; /* Adds space to the right of the logo image */
+}
+
+.nav_items {
+    display: flex; /* Sets the container as a flexbox for flexible layout */
+    justify-content: space-between; /* Distributes space evenly between child items */
+    align-items: center; /* Aligns child items vertically in the center */
+    font-size: 1.3em;
+}
+
+.item {
+    display: flex; /* Makes the container for individual items a flexbox */
+    justify-content: center; /* Centers the child items horizontally within the container */
+}
+
+.nav_items li {
+    padding: 1em; /* Adds space around each list item for better spacing */
+}
+
+.nav_items li a {
+    transition: 0.3s; /* Adds a smooth transition effect for hover or focus changes */
+    font-size: 16px; /* Sets the font size for the link text */
+    font-weight: 600; /* Makes the link text slightly bold for better readability */
+    color: #000; /* Sets the link text color to black */
+    letter-spacing: 1px; /* Adds spacing between letters for improved typography */
+}
+.nav_items li a {
+    text-decoration: none !important; /* Removes underline from all navigation links */
+}
+
+/* Specifically target username link */
+.nav_items a[href*="profile/edit.php"] {
+    text-decoration: none !important;
+}
+
+.nav_items li::after {
+    content: ''; /* Adds an empty pseudo-element after each list item */
+    width: 0; /* Initial width of the pseudo-element is set to 0 */
+    height: 2px; /* Sets the height of the pseudo-element as a thin line */
+    background: #40514E; /* Sets the color of the pseudo-element to dark teal */
+    display: block; /* Forces the pseudo-element to behave like a block-level element */
+    margin: auto; /* Centers the pseudo-element horizontally under the text */
+    transition: 0.5s; /* Adds a smooth animation effect for width changes */
+}
+
+.nav_items li:hover::after {
+    width: 100%; /* Expands the pseudo-element to full width when the list item is hovered */
+}
+
+/* Remove underline from logo span specifically */
+.logo span {
+    text-decoration: none !important;
+}
+
+/* Also target the logo link to ensure no underline */
+.logo {
+    text-decoration: none !important;
+}
+
+.logo a {
+    text-decoration: none !important;
+}
+
+/* --- BUTTONS --- */
+.btn {
+    padding: 12px 15px; /* Adds space inside the button for better sizing */
+    font-size: 18px; /* Sets a larger font size for better readability */
+    letter-spacing: 2px; /* Adds extra spacing between characters for a stylish look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate the button is clickable */
+    margin-left: 12px; /* Adds space between buttons for separation */
+    border: 2px solid #fff; /* Adds a white border around the button */
+    background-color: #257180; /* Sets the background color to a teal shade */
+    color: #fff; /* Sets the button text color to white */
+    transition: all 0.5s ease-out; /* Adds a smooth transition effect for all properties */
+}
+
+/* Logout btn */
+.btn2 {
+    background-color: #0E3663; /* Sets a darker blue background for the second button variant */
+}
+
+/* Logout btn */
+.btn2:hover {
+    background-color: transparent; /* Removes the background color when hovered */
+    color: #40514E; /* Changes the text color to dark teal */
+    border: 2px solid #40514E; /* Changes the border color to dark teal */
+}
+
+.nav_btn {
+    flex: 1; /* Makes the container for navigation buttons take up available space in its flex container */
+}
+
+.nav_menu {
+    display: none; /* Hides the navigation menu by default */
+}
+
+
+/* Story Selection Page Styles */
+.story-selection-container {
+    padding: 9em 0 2% 0;
+    width: 90%;
+    margin: auto;
+    max-width: 1200px;
+}
+
+.story-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.story-header .top_heading {
+    color: #11999E;
+    font-size: 2.5em;
+    margin-bottom: 1rem;
+}
+
+.story-header .heading {
+    color: #473829;
+    font-size: 2.5em;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.story-header .para {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.story-card {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.story-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.story-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.story-card:hover .story-image img {
+    transform: scale(1.1);
+}
+
+.story-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.story-card:hover .story-overlay {
+    opacity: 1;
+}
+
+.story-overlay i {
+    font-size: 3rem;
+    color: #fff;
+}
+
+.story-content {
+    padding: 1.5rem;
+}
+
+.story-content h3 {
+    color: #473829;
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.story-content p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.story-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #888;
+}
+
+.story-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.back-button {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Story Reading Page Styles */
+.story-reading-container {
+    padding: 9em 0 2% 0;
+    width: 90%;
+    margin: auto;
+    max-width: 800px;
+}
+
+.story-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    border-bottom: 2px solid #E4F9F5;
+    gap: 1rem;
+}
+
+.story-nav .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #11999E;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(17, 153, 158, 0.1);
+    font-size: 14px;
+}
+
+.story-nav .back-btn:hover {
+    color: #0E3663;
+}
+
+.story-nav .story-progress {
+    font-size: 14px;
+    color: #666;
+}
+
+.story-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.story-title h1 {
+    color: #473829;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.story-subtitle {
+    color: #11999E;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.audio-button-container {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.audio-play-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #11999E, #0E3663);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(17, 153, 158, 0.3);
+}
+
+.audio-play-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(17, 153, 158, 0.4);
+}
+
+.audio-play-button i {
+    font-size: 1.5rem;
+}
+
+.story-title .story-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Storybook Layout Styles */
+.storybook-container {
+    margin-bottom: 2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+}
+
+.story-page {
+    background: #fff;
+    margin-bottom: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+}
+
+.story-image {
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.story-image img {
+    max-width: 100%;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.story-text-content {
+    padding: 2rem;
+    text-align: center;
+    background: #fff;
+}
+
+.story-text-content .main-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: #473829;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.story-text-content .translation {
+    font-size: 16px;
+    color: #666;
+    font-style: italic;
+    background: rgba(17, 153, 158, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #11999E;
+    margin: 0;
+}
+
+.story-text {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-size: 18px;
+    color: #333;
+}
+
+.story-text .main-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #473829;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.story-text .translation {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-style: italic;
+    background: rgba(17, 153, 158, 0.1);
+    padding: 0.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #11999E;
+}
+
+.audio-controls {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.audio-controls h3 {
+    color: #473829;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.simple-audio-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.big-play-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #11999E;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+.big-play-btn:hover {
+    background: #0E3663;
+    transform: scale(1.05);
+}
+
+.big-play-btn i {
+    font-size: 2rem;
+}
+
+.audio-info {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.audio-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.play-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #11999E;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play-btn:hover {
+    background: #0E3663;
+    transform: scale(1.1);
+}
+
+.audio-progress {
+    flex: 1;
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+}
+
+.audio-progress-bar {
+    height: 100%;
+    background: #11999E;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.1s ease;
+}
+
+.time-display {
+    font-size: 14px;
+    color: #666;
+    min-width: 80px;
+    text-align: center;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.volume-slider {
+    width: 100px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #11999E;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.nav-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid #11999E;
+    background: transparent;
+    color: #11999E;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.nav-btn:hover {
+    background: #11999E;
+    color: white;
+}
+
+.nav-btn.primary {
+    background: #11999E;
+    color: white;
+}
+
+.nav-btn.primary:hover {
+    background: #0E3663;
+}
+
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+    .story-selection-container {
+        padding: 9em 1em 4em 1em;
+    }
+    
+    .stories-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 400px;
+    }
+    
+    .story-header .heading {
+        font-size: 2rem;
+    }
+    
+    .story-reading-container {
+        padding: 9em 1em 4em 1em;
+    }
+    
+    .story-title h1 {
+        font-size: 2rem;
+    }
+    
+    .story-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .story-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .story-nav .back-btn {
+        font-size: 12px;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .story-image img {
+        max-height: 300px;
+        height: auto;
+        width: auto;
+    }
+    
+    .story-text-content .main-text {
+        font-size: 20px;
+    }
+    
+    .story-text-content .translation {
+        font-size: 16px;
+    }
+    
+    .story-text-content {
+        padding: 1.5rem;
+    }
+    
+    .story-page {
+        min-height: 400px;
+    }
+    
+    .audio-player {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .story-header .top_heading {
+        font-size: 2rem;
+    }
+    
+    .story-header .heading {
+        font-size: 1.5rem;
+    }
+    
+    .story-content {
+        padding: 1rem;
+    }
+    
+    .story-text {
+        padding: 1.5rem;
+    }
+    
+    .story-text .main-text {
+        font-size: 18px;
+    }
+    
+    .story-text .translation {
+        font-size: 14px;
+    }
+    
+    .big-play-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .story-image img {
+        max-height: 250px;
+        height: auto;
+        width: auto;
+    }
+    
+    .story-text-content .main-text {
+        font-size: 18px;
+    }
+    
+    .story-text-content .translation {
+        font-size: 14px;
+    }
+    
+    .story-text-content {
+        padding: 1rem;
+    }
+    
+    .story-page {
+        min-height: 350px;
+    }
+}
+
+

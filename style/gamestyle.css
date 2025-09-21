@@ -1,0 +1,874 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+/* Imports the 'Varela Round' font from Google Fonts to be used in your styles */
+
+* {
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    margin: 0%; /* Removes default margin for all elements */
+    padding: 0%; /* Removes default padding for all elements */
+    text-decoration: none;  
+}
+
+body {
+    background-color: #E4F9F5; /* Sets a soft teal color as the background */
+    color: #000; /* Sets the text color to black */
+    font-family: "Varela Round", sans-serif; /* Applies the 'Varela Round' font and a sans-serif fallback */
+}
+
+.background {
+    position: relative; /* Positions the element relative to its normal position */
+    background: linear-gradient(90deg, #30E3CA 35%, #E4F9F5 100%); /* Applies a gradient background from teal to white */
+}
+
+.logo {
+    font-size: 2em; /* Sets the font size of the logo text */
+    font-weight: 600; /* Makes the logo text bold */
+    flex: 1; /* Ensures the logo occupies all available space in its flex container */
+    color: #E4F9F5; /* Sets the text color of the logo to match the lighter gradient background */
+    display: flex; /* Makes the logo a flex container for child elements (e.g., an image) */
+    align-items: center; /* Vertically centers the child elements within the logo container */
+}
+
+.logo img {
+    width: 70px; /* Sets the logo image's width to 70 pixels */
+    margin-right: 1%; /* Adds space to the right of the logo image */
+}
+
+.navbar {
+    width: 100%; /* Makes the navbar span the full width of the page */
+    margin: auto; /* Centers the navbar horizontally within its container */
+    padding: 2rem; /* Adds padding inside the navbar for spacing */
+    display: flex; /* Enables flexbox layout for easier alignment of child elements */
+    justify-content: space-between; /* Places child elements at both ends with space in between */
+    align-items: center; /* Vertically centers the child elements within the navbar */
+    z-index: 1; /* Ensures the navbar appears on top of other elements */
+    top: 0; /* Fixes the navbar to the top of the page */
+    position: fixed; /* Keeps the navbar in place when scrolling */
+    background-color: #30E3CA;
+}
+.navbar.scrolled {
+    background-color: #30E3CA; /* Changes the navbar background color to a light teal when scrolled */
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px; /* Adds a subtle shadow for depth, simulating an elevated effect */
+}
+.nav_items {
+    display: flex; /* Sets the container as a flexbox for flexible layout */
+    justify-content: space-between; /* Distributes space evenly between child items */
+    align-items: center; /* Aligns child items vertically in the center */
+    font-size: 1.3em;
+}
+
+.item {
+    display: flex; /* Makes the container for individual items a flexbox */
+    justify-content: center; /* Centers the child items horizontally within the container */
+}
+
+.nav_items li {
+    list-style: none; /* Removes the default bullet points for list items */
+    padding: 1em; /* Adds space around each list item for better spacing */
+}
+
+.nav_items li a {
+    text-decoration: none; /* Removes the default underline from the links */
+    transition: 0.3s; /* Adds a smooth transition effect for hover or focus changes */
+    font-size: 16px; /* Sets the font size for the link text */
+    font-weight: 600; /* Makes the link text slightly bold for better readability */
+    color: #000; /* Sets the link text color to black */
+    letter-spacing: 1px; /* Adds spacing between letters for improved typography */
+}
+.nav_items li::after {
+    content: ''; /* Adds an empty pseudo-element after each list item */
+    width: 0; /* Initial width of the pseudo-element is set to 0 */
+    height: 2px; /* Sets the height of the pseudo-element as a thin line */
+    background: #40514E; /* Sets the color of the pseudo-element to dark teal */
+    display: block; /* Forces the pseudo-element to behave like a block-level element */
+    margin: auto; /* Centers the pseudo-element horizontally under the text */
+    transition: 0.5s; /* Adds a smooth animation effect for width changes */
+}
+
+.nav_items li:hover::after {
+    width: 100%; /* Expands the pseudo-element to full width when the list item is hovered */
+}
+
+.nav_btn {
+    flex: 1; /* Makes the container for navigation buttons take up available space in its flex container */
+}
+
+/* All buttons */
+.btn {
+    padding: 12px 15px; /* Adds space inside the button for better sizing */
+    font-size: 18px; /* Sets a larger font size for better readability */
+    letter-spacing: 2px; /* Adds extra spacing between characters for a stylish look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate the button is clickable */
+    margin-left: 12px; /* Adds space between buttons for separation */
+    border: 2px solid #fff; /* Adds a white border around the button */
+    background-color: #257180; /* Sets the background color to a teal shade */
+    color: #fff; /* Sets the button text color to white */
+    transition: all 0.5s ease-out; /* Adds a smooth transition effect for all properties */
+}
+
+/* Logout btn */
+.btn2 {
+    background-color: #0E3663; /* Sets a darker blue background for the second button variant */
+}
+
+/* Logout btn */
+.btn2:hover {
+    background-color: transparent; /* Removes the background color when hovered */
+    color: #40514E; /* Changes the text color to dark teal */
+    border: 2px solid #40514E; /* Changes the border color to dark teal */
+}
+
+/* Hamburger icon*/
+.nav_menu {
+    display: none; /* Hides the navigation menu by default */
+}
+
+.main {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #E4F9F5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 96px;
+}
+
+.main.active{
+    filter: blur(15px);
+    pointer-events: none;
+}
+.container{
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
+}
+
+
+.home{
+    position: relative;
+    left: 0;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0 0 5px black);
+    padding: 0 16px;
+
+}
+.home.active{
+    left: 0;
+    display: flex;
+}
+.home-content {
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 24px;
+    background: #ffffff;
+    border: 2px solid #30E3CA;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    margin: 0 auto;
+    
+    
+}
+.game-modes-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    text-align: center;
+    padding-top: 2em;
+}
+.game-mode-card{
+    width: 100%;
+    padding: 2rem;
+    background: #ffffff;
+    border: 2px solid #30E3CA;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.game-mode-card .ho-btn{
+    width: 100%;
+    max-width: 240px;
+    margin-top: 12px;
+}
+.game-mode-card h3{
+    color: #473829;
+    padding-bottom: 10px;
+}
+.game-mode-card .best-scores{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #473829;
+    margin-bottom: 12px;
+}
+.game-mode-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    background: #fff;
+    border-color: #11999E;
+}
+.home-content h1 {
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-size: 42px;
+    font-weight: 500;
+
+}
+
+.home-content .mode-btn .ho-btn  {   
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 280px;
+    height: 100px;
+    outline: none;
+    border-radius: 15px;
+    text-decoration: none;
+    color: rgb(236, 225, 225);
+    font-weight: 500;
+    transition: .5s;
+    margin-top: 23px;
+    letter-spacing: 2px;
+    padding: 12px 15px; /* Adds space inside the button for better sizing */
+    font-size: 18px; /* Sets a larger font size for better readability */
+    letter-spacing: 2px; /* Adds extra spacing between characters for a stylish look */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate the button is clickable */
+    margin-left: 12px; /* Adds space between buttons for separation */
+    border: 2px solid #fff; /* Adds a white border around the button */
+    background-color: #257180; /* Sets the background color to a teal shade */
+    color: #fff; /* Sets the button text color to white */
+    transition: all 0.5s ease-out; /* Adds a smooth transition effect for all properties */
+
+    
+}
+
+.home-content .mode-btn .ho-btn:hover{
+    background: #0E3663;
+    
+}
+
+/* Unified primary button to match dashboard */
+.ho-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 200px;
+    padding: 12px 20px;
+    outline: none;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #257180;
+    background-color: #257180;
+    color: #fff;
+    transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.ho-btn:hover, .ho-btn:focus-visible {
+    background: #0E3663;
+    border-color: #0E3663;
+    box-shadow: 0 6px 14px rgba(14,54,99,0.25);
+    transform: translateY(-1px);
+}
+
+
+
+.popup-info{
+
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.9);
+    width: 420px;
+    background-color: #ffffff;
+    border: 2px solid #30E3CA;
+    border-radius: 12px;
+    padding: 16px 18px ;
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s ease;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+
+}
+
+.popup-info.active{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+
+
+}
+
+.popup-info h2 {
+    font-size: 26px;
+    color: #0E3663;
+    display: flex;
+    background: linear-gradient(50deg, transparent,#E4F9F5,transparent);
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+}
+.popup-info .sel-btn .info-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px ;
+    width: 300px;
+    height: 45px;
+    border: 2px solid #257180;
+    outline: none;
+    border-radius: 10px;
+    border-bottom: 4px solid #0E3663;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: .2s;
+
+}
+.popup-info .easy-btn  {
+    transform: none;
+    background:#d9f7e3;
+    color: #0c5b18;
+       
+}
+.popup-info .medium-btn  {
+    transform: none;
+    background: #FFF3CD;
+    color: #6c4a00;
+}
+.popup-info .hard-btn  {
+    transform: none;
+    background: #F8D7DA;
+    color: #842029;
+}
+
+.popup-info .sel-btn .info-btn:hover{
+    filter: brightness(0.95);
+    border-color: #0E3663;
+}
+
+.popup-info .info .ho-btn:hover{
+    background: black;
+    border-color: lightslategray;
+}
+.popup-info .btn-exit{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    width: 200px;
+    padding: 15px 0 8px;
+ 
+
+}
+
+.popup-info .btn-exit .info-btn:nth-child(1){
+    background: #E4F1F6;
+    color: #0E3663;
+}
+.popup-info .btn-exit .info-btn:nth-child(1):hover {
+    background: #d8e8f1;
+    color: #0E3663;
+}
+
+
+/* Message box */
+.popup {
+   
+    display: none; 
+    position: absolute;
+    top: 50%;
+    right: 30%;
+    width: 175px;
+    background-color: #11999E;
+    border-radius: 6px;
+    padding: 15px;
+    transition: .0s;
+    
+}
+.pup-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0px;
+
+}
+.popup h3{
+    font-size: 14px;
+    color: white;
+    border-radius: 6px;
+    text-align: center;
+}
+
+
+#pupMessage {
+    margin-bottom: 20px;
+    transition-delay: .2s;
+
+}
+.pupCloseBtn {
+    padding: 10px 20px ;
+    cursor: pointer;
+    background-color: #2C2D2D;
+    color: #fff;
+    border:none;
+    border-radius: 5px;
+   
+}
+.quiz-section{
+    position: relative;
+    left: 0;
+    width: 100%;
+    background-color: #E4F9F5;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: .1s ease-in-out;
+    transition-delay:0s ;
+  
+
+}
+
+.quiz-section.active{
+    left: 0;
+    display: flex;
+}
+
+.quiz-section .quiz-box{
+    position: relative;
+    width: 400px;
+    min-height: 400px;
+    height: auto;
+    background: #ffffff;
+    border: 2px solid #30E3CA;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s ease;
+    transition-delay: .2s;
+    margin: 0 auto;
+    align-self: center;
+
+}
+.quiz-section .quiz-box.active{
+    opacity: 1;
+    pointer-events: auto;
+    transition: 1s ease;
+    transition-delay: .1s;
+
+}
+
+
+.quiz-box h1 {
+    font-size: 24px;
+    color: #0E3663;
+    text-align: center;
+    background: linear-gradient(45deg, transparent,#E4F9F5,transparent);
+    border-radius: 8px;
+}
+.quiz-box .quiz-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid black;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.quiz-header span {
+    margin-left: 30px;
+    font-size: 30px;
+    font-weight: 500;
+    color: #000;
+}
+.quiz-header span.easy{
+    color: green;
+
+}
+.quiz-header span.medium{
+    color: orange;
+}
+.quiz-header span.hard{
+    color: red;
+}
+
+.quiz-header .header-score{
+    background: #30E3CA;
+    border-radius: 3px;
+    padding: 7px;
+}
+.quiz-box .question-text{
+    font-size: 18px;
+    font-weight: 600;
+    color: #2b3a38;
+    text-align: center;
+    padding: 0 8px;
+    margin-top: 4px;
+}
+
+.option-list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-items: stretch;
+    margin: 16px 0 0 0;
+    width: 100%;
+}
+
+.option-list .option {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: 2px solid rgba(238, 230, 230, 0.8);
+    border-radius: 12px;
+    font-size: 14px;
+    color: #000;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+    background-color: azure;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.option-list .option:hover {
+    background: #257180;
+    color: #fff;
+    border-color: #257180;
+}
+.option-list .option.correct{
+    background: #22c55e;
+    color: #0b2b12;
+    border-color: #198f44;
+}
+
+.option-list .option.incorrect{
+    background: #fff;
+    color: #b42318;
+    border-color: #f1a19a;
+}
+
+.option-list .option.disabled {
+    pointer-events: none;
+}
+
+.quiz-box .quiz-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid rgb(151, 160, 151);
+    padding: 20px;
+    color: #000;
+    margin: 10px;
+
+}
+.quiz-footer .question-total{
+    font-size: 16px;
+    font-weight: 600;
+
+}
+
+
+.quiz-footer .next-btn{
+    width: 90px;
+    height: 40px;
+    background: #e2e8e8;
+    border: 2px solid #b7c4c0;
+    outline: none;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #6b7a77;
+    font-weight: 700;
+    cursor: pointer;
+    pointer-events: none;
+    transition: .2s ease;
+}
+.quiz-footer .next-btn.active:hover {
+    background: #32ccb7;
+    border-color: white;
+}
+
+.quiz-footer .next-btn.active {
+    pointer-events: auto;
+    background:  #257180;
+    border-color: #257180;
+    color: white;
+}
+
+
+.quiz-section .result-box {
+    margin-top: 23px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.9);
+    width: 400px;
+    height: 500px;
+    background: #ffffff;
+    border: 2px solid #30E3CA;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: .1s ease;
+    transition-delay: .3s;
+
+}
+.quiz-section .result-box.active{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+.result-box h2 {
+    font-size: 32px;
+    color:#0E3663;
+    background: linear-gradient(45deg, transparent,#E4F9F5,transparent);
+}
+.result-box .percentage-container{
+    width: 350px;
+    display:flex ;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0 40px;
+    transition-delay: .3s;
+}
+
+.percentage-container .circular-progress{
+    position: relative;
+    width: 250px;
+    height: 250px;
+    background: conic-gradient(#30E3CA 0deg 90deg, rgba(17, 153, 158, 0.1) 90deg 360deg);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition-delay: .3s;
+
+}
+
+.percentage-container .circular-progress::before {
+    content: '';
+    position: absolute;
+    width: 210px;
+    height: 210px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition-delay: .3s;
+
+
+
+}
+.circular-progress .progress-value{
+    position: relative;
+    font-size: 50px;
+    font-weight: 500;
+    transition-delay: .3s;
+
+}
+.percentage-container .score-text{
+    font-size: 26px;
+    font-weight: 500;
+    margin-top: 25px;
+
+}
+.result-box .buttons{
+    display: flex;
+}
+
+
+.buttons button{
+    width: 140px;
+    height: 42px;
+    background: #257180;
+    border: 2px solid #257180;
+    outline: none;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 600;
+    margin: 0 10px 10px;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+.buttons button:nth-child(1){
+    background: #E4F1F6;
+    color: #0E3663;
+    border-color: #d8e8f1;
+}
+
+.buttons button:nth-child(1):hover{
+    background: #d8e8f1;
+    color: #0E3663;
+    border-color: #c8dde7;
+}
+
+.buttons button:nth-child(2){
+    background: #257180;
+    color: #ffffff;
+    border-color: #257180;
+}
+
+.buttons button:nth-child(2):hover{
+    background: #0E3663;
+    color: #ffffff;
+    border-color: #0E3663;
+}
+
+.fill-input {
+    width: 100%; /* Adjust width as needed */
+    margin-left: 0;
+    padding: 10px; /* Add padding for comfort */
+    font-size: 16px; /* Make text legible */
+    border: 2px solid #ccc; /* Define a subtle border */
+    border-radius: 5px; /* Add rounded corners */
+    box-sizing: border-box; /* Ensure padding doesn't overflow the box */
+    outline: none; /* Remove default focus outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.fill-input:focus {
+    border-color: #11999E; /* Change border color when focused */
+    box-shadow: 0 0 5px rgba(17, 153, 158, 0.5); /* Add glow effect */
+}
+
+.fill-input::placeholder {
+    color: #aaa; /* Placeholder text color */
+    font-style: italic; /* Make placeholder text slightly different */
+}
+
+.fill-submit-btn {
+    padding: 10px 20px;
+    margin-top: 10px;
+    width: 100%;
+    background-color: #257180;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.fill-submit-btn:hover {
+    background-color: #0E3663;
+}
+
+@media only screen and (max-width:990px){
+    .left h1{
+        font-size: 2.7em;
+    }
+    .boxes{
+        margin: 0 1em;
+    }
+    .para{
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width:920px){
+    .nav_items{
+        position: absolute;
+        top: -1%;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 5em 0 2em 0;
+        gap: 0.9rem;
+        background-color: #30E3CA;
+        transition: 0.5s;
+        z-index: -1;
+        transform: translateY(-100%);
+    }
+    .nav_btn{
+        display: flex;
+        flex-direction: column;
+    }
+    .nav_btn .btn2{
+        margin-top: 1em;
+    }
+    .nav_items.open{
+        transform: translate(0);
+    }
+    .nav_menu{
+        display: block;
+        font-size: 2em;
+    }
+    .item{
+        flex-direction: column;
+    }
+    .main{
+        width: 95%;
+    }
+    .left h1{
+        font-size: 2em;
+    }
+    .btn{
+        padding: 12px 9px;
+    }
+}
+@media only screen and (max-width:850px){
+
+    .box{
+        grid-template-columns: 1fr;
+    }
+    .box{
+        grid-template-columns: repeat(2, 1fr );
+    }
+    .footer_container{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media only screen and (max-width:580px){
+    .box{
+        grid-template-columns:1fr;
+    }
+    .footer_container{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .boxes{
+        margin: 1em auto;
+    }
+}
+@media only screen and (max-width:435px){
+
+    .sec{
+        padding: 7em 0 2% 0;
+    }
+    .footer_container,.left_box{
+        grid-template-columns: 1fr;
+    }
+}
