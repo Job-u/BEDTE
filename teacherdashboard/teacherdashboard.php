@@ -22,22 +22,23 @@ include("../phpsql/config.php");
 </head>
 <body>
     <nav class="navbar">
-        <a href="teacherdashboard.php">
-            <div class="logo">
-                <img src="../img/LOGO.png" alt="">
-                <span>BEDTE</span>
-            </div>
-        </a>
-        <ul class="nav_items">
-            <div class="item">
-                <li><a href="manage_scores.php">Student Scores</a></li>
-                <li><a href="manage_questions.php">Manage Questions</a></li>
-            </div>
-            <div class="nav_btn">
-                <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
-            </div>
-        </ul>
-    </nav>
+    <a href="teacherdashboard.php">
+        <div class="logo">
+            <img src="../img/LOGO.png" alt="">
+            <span>BEDTE</span>
+        </div>
+    </a>
+    <ul class="nav_items">
+        <div class="item">
+            <li><a href="manage_scores.php">Student Scores</a></li>
+            <li><a href="manage_questions.php">Manage Questions</a></li>
+
+        </div>
+        <div class="nav_btn">
+            <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
+        </div>
+    </ul>
+</nav>
 
     <section class="sec">
         <div class="dashboard-grid">
@@ -60,19 +61,64 @@ include("../phpsql/config.php");
                 ?>
             </div>
 
+            <div class="stats-card">
+                <h3>Average Score</h3>
+                <?php
+                $query = mysqli_query($con, "SELECT AVG(score) as avg_score FROM scores");
+                $result = mysqli_fetch_assoc($query);
+                echo "<p class='stat-number'>" . round($result['avg_score'], 1) . "</p>";
+                ?>
+            </div>
+
+            <div class="stats-card">
+                <h3>Active Today</h3>
+                <?php
+                $query = mysqli_query($con, "SELECT COUNT(DISTINCT user_id) as count FROM scores WHERE DATE(played_on) = CURDATE()");
+                $result = mysqli_fetch_assoc($query);
+                echo "<p class='stat-number'>" . $result['count'] . "</p>";
+                ?>
+            </div>
+
             <!-- Quick Actions -->
             <div class="action-cards">
                 <a href="manage_scores.php" class="action-card">
                     <i class="ri-bar-chart-box-line"></i>
-                    <h3>View Student Scores</h3>
-                    <p>Check student performance and progress</p>
+                    <h3>Student Scores</h3>
+                    <p>View and analyze student performance data</p>
                 </a>
 
                 <a href="manage_questions.php" class="action-card">
                     <i class="ri-question-line"></i>
-                    <h3>Manage Questions</h3>
+                    <h3>Question Bank</h3>
                     <p>Add or modify game questions</p>
                 </a>
+
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-list">
+                    <?php
+                    $query = mysqli_query($con, "
+                        SELECT u.Username, s.game_mode, s.difficulty, s.score, s.played_on 
+                        FROM scores s 
+                        JOIN users u ON s.user_id = u.Id 
+                        ORDER BY s.played_on DESC 
+                        LIMIT 5
+                    ");
+                    while($row = mysqli_fetch_assoc($query)) {
+                        echo "<div class='activity-item'>";
+                        echo "<div class='activity-icon'><i class='ri-gamepad-line'></i></div>";
+                        echo "<div class='activity-details'>";
+                        echo "<p><strong>" . htmlspecialchars($row['Username']) . "</strong> completed ";
+                        echo htmlspecialchars($row['game_mode']) . " (" . htmlspecialchars($row['difficulty']) . ") ";
+                        echo "with score " . htmlspecialchars($row['score']) . "</p>";
+                        echo "<small>" . date('M d, Y H:i', strtotime($row['played_on'])) . "</small>";
+                        echo "</div>";
+                        echo "</div>";
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </section>
