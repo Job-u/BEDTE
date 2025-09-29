@@ -69,7 +69,7 @@
             <div class="card">
 
                 <div class="imbBx">
-                    <img src="../img/pic1.jpg" alt="">
+                    <img src="../img/antonio.png" alt="">
                 </div>
 
                 <div class="content">
@@ -94,7 +94,7 @@
             <div class="card">
 
                 <div class="imbBx">
-                    <img src="../img/pic1.jpg" alt="">
+                    <img src="../img/montenegro.png" alt="">
                 </div>
 
                 <div class="content">
@@ -119,7 +119,7 @@
             <div class="card">
 
                 <div class="imbBx">
-                    <img src="../img/pic1.jpg" alt="">
+                    <img src="../img/tulio.png" alt="">
                 </div>
 
                 <div class="content">
@@ -144,7 +144,7 @@
             <div class="card">
 
                 <div class="imbBx">
-                    <img src="../img/pic1.jpg" alt="">
+                    <img src="../img/florida.png" alt="">
                 </div>
 
                 <div class="content">
