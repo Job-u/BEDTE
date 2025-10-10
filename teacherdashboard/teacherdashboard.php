@@ -28,16 +28,32 @@ include("../phpsql/config.php");
             <span>BEDTE</span>
         </div>
     </a>
-    <ul class="nav_items">
+    <ul class="nav_items" id="nav_links">
         <div class="item">
             <li><a href="manage_scores.php">Student Scores</a></li>
             <li><a href="manage_questions.php">Manage Questions</a></li>
-
         </div>
+        <?php 
+            
+            $id = $_SESSION['id'];
+            $query = mysqli_query($con,"SELECT*FROM users WHERE Id=$id");
+
+            while($result = mysqli_fetch_assoc($query)){
+                $res_Uname = $result['Username'];
+                $res_Email = $result['Email'];
+                $res_Age = $result['Age'];
+                $res_id = $result['Id'];
+            }
+            
+            echo "<a href='../profile/editteacher.php?Id=$res_id'>$res_Uname</a>";
+            ?>
         <div class="nav_btn">
             <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
         </div>
     </ul>
+    <div class="nav_menu" id="menu_btn">
+        <i class="ri-menu-line"></i>
+    </div>
 </nav>
 
     <section class="sec">
@@ -122,5 +138,7 @@ include("../phpsql/config.php");
             </div>
         </div>
     </section>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="../js/homepage.js"></script>
 </body>
 </html>

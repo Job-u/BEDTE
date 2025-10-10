@@ -19,6 +19,7 @@
     <title>Project Team</title>
     <link rel="stylesheet" href="../style/aboutus.css">
     <link rel="stylesheet" href="../style/userdashboard.css">
+    
 </head>
 <body>
 
@@ -78,10 +79,10 @@
                     </div>
                     <ul class="sci">
                         <li style="--i: 1">
-                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/shaneeezz.0" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                         </li>
                         <li style="--i: 2">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://github.com/mawizxc" target="_blank"><i class="fa-brands fa-github"></i></a>
                         </li>
                         <li style="--i: 3">
                             <a href="https://www.facebook.com/Shane.cutieehehe" target="_blank"><i class="fa-brands fa-facebook"></i></a>
@@ -128,10 +129,10 @@
                     </div>
                     <ul class="sci">
                         <li style="--i: 1">
-                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/abcdanz_" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                         </li>
                         <li style="--i: 2">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://github.com/abcdanz" target="_blank"><i class="fa-brands fa-github"></i></a>
                         </li>
                         <li style="--i: 3">
                             <a href="https://www.facebook.com/DanielDenzelPogi" target="_blank"><i class="fa-brands fa-facebook"></i></a>
@@ -153,10 +154,10 @@
                     </div>
                     <ul class="sci">
                         <li style="--i: 1">
-                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/rich.ie12190/" target="_blank"><i class="fa-brands fa-instagram" ></i></a>
                         </li>
                         <li style="--i: 2">
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://github.com/chie1219" target="_blank"><i class="fa-brands fa-github"></i></a>
                         </li>
                         <li style="--i: 3">
                             <a href="https://www.facebook.com/chieflorida19" target="_blank"><i class="fa-brands fa-facebook"></i></a>

@@ -1,4 +1,3 @@
-
 //navbar scroll
 window.addEventListener('scroll', function(){
     let navbar = document.querySelector('.navbar');
@@ -8,17 +7,29 @@ window.addEventListener('scroll', function(){
         navbar.classList.remove('scrolled')
     }
 })
-// navbar toggle
-const menuBtn = document.getElementById('menu_btn')
-const navLinks = document.getElementById('nav_links')
-const menuIcon = document.querySelector('i')
+// navbar toggle (unified with phrase.php)
+const menuBtn = document.getElementById('menu_btn');
+const navLinks = document.getElementById('nav_links');
+const menuIcon = document.querySelector('.nav_menu i');
 
-menuBtn.addEventListener('click', (e)=>{
-    navLinks.classList.toggle('open')
+if (menuBtn && navLinks && menuIcon) {
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navLinks.classList.toggle('open');
+        const isOpen = navLinks.classList.contains('open');
+        menuIcon.setAttribute('class', isOpen ? 'ri-close-line' : 'ri-menu-line');
+    });
 
-    const isOpen = navLinks.classList.contains('open')
-    menuIcon.setAttribute('class', isOpen ? 'ri-close-line' : 'ri-menu-line')
-})
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        const clickedInsideMenu = menuBtn.contains(e.target) || navLinks.contains(e.target);
+        if (!clickedInsideMenu && navLinks.classList.contains('open')) {
+            navLinks.classList.remove('open');
+            menuIcon.setAttribute('class', 'ri-menu-line');
+        }
+    });
+}
+
 //Animation
 
 const scrollRevealOption = {
@@ -71,3 +82,4 @@ ScrollReveal().reveal('.footer_col',{
     ...scrollRevealOption,
     delay:500,
 });
+

@@ -115,6 +115,8 @@
     color: white;
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -155,6 +157,20 @@
 
 .data-table tbody tr:hover {
     background: #f8f9fa;
+}
+
+/* Responsive table wrapper */
+.scores-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.scores-table {
+    min-width: 720px;
 }
 
 /* Form Styles */
@@ -315,5 +331,9 @@
     
     .filters {
         flex-direction: column;
+    }
+
+    .filters select {
+        width: 100%;
     }
 }

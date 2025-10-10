@@ -85,6 +85,10 @@
     width: 100%; /* Expands the pseudo-element to full width when the list item is hovered */
 }
 
+.nav_menu {
+    display: none; /* Hides the navigation menu by default */
+}
+
 /* Remove underline from logo span specifically */
 .logo span {
     text-decoration: none !important;
@@ -634,6 +638,51 @@
 .nav-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* Hamburger Menu Styles */
+.nav_menu {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
+    .nav_menu {
+        display: block;
+    }
+
+    .nav_items {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #30E3CA;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem;
+        text-align: center;
+        transform: translateY(-200%);
+        transition: 0.3s ease;
+        z-index: 999;
+    }
+
+    .nav_items.open {
+        transform: translateY(0);
+    }
+
+    .item {
+        flex-direction: column;
+    }
+
+    .nav_items li {
+        padding: 0.5em;
+    }
+
+    .nav_btn {
+        margin-top: 1rem;
+    }
 }
 
 /* Responsive Design */

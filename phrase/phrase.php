@@ -14,6 +14,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style/userdashboard.css">
+    <link rel="stylesheet" href="../style/story.css">
+    <link rel="stylesheet" href="../style/phrase.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css">
     <title>Daily Phrase</title>
 </head>
@@ -27,7 +29,7 @@
         <ul class="nav_items" id="nav_links">
                 <div class="item">
             <li><a href="../aboutus/aboutus.php">Project Team</a></li>
-            <li><a href="../contact/contact.html">Contact Us</a></li>
+            <li><a href="../contact/contactus.php">Contact Us</a></li>
                 </div>
     
                 <?php 
@@ -57,14 +59,24 @@
     <section class="sec" id="features">
         <div class="left">
             <h1>Phrase of the Day</h1>
-            
+            <div id="phrase-container" class="boxes phrase-container">
+                <div class="top_heading phrase-top-heading">Today’s Phrase</div>
+                <div id="daily-phrase" class="heading" style="margin:0;">&nbsp;</div>
+                <p id="daily-translation" class="para">&nbsp;</p>
+                <div class="phrase-audio-button">
+                    <button id="phrase-play" class="audio-play-button" title="Play audio" aria-label="Play Audio">
+                        <i class="ri-play-circle-fill"></i>
+                        <span class="audio-play-label">Play Audio</span>
+                    </button>
+                </div>
+                <audio id="phrase-audio" preload="auto"></audio>
+            </div>
         </div>
         
                 
 
    <!-- This is where the word of the day will be displayed -->
-   <p id="daily-phrase" class="heading , phrase-texta"></p>
-</div>
+   
 
     </section>
 

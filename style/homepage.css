@@ -161,15 +161,18 @@ body{
     grid-row: 1/span 2;
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 .left_box img:nth-child(2),
 .left_box img:nth-child(3){
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 .left_box img{
     width: 100%;
     border-radius: 10px;
+    height: auto;
 }
 .top_heading{
     color: #11999E;
@@ -205,6 +208,7 @@ body{
     grid-template-columns: repeat(3,1fr);
     text-align: center;
     padding-top: 5em;
+    gap: 2rem;
 }
 .boxes{
     max-width: 400px;
@@ -217,6 +221,8 @@ body{
 }
 .box img{
     width: 150px;
+    max-width: 100%;
+    height: auto;
 }
 .boxes:hover{
     border-radius: 10px;
@@ -225,16 +231,24 @@ body{
 }
 /*___________contact */
 .left_box input{
-    padding: 15px;
+    padding: 14px 16px;
     outline: none;
     color: #473829;
-    margin: 2% 0;
+    margin: 10px 0;
     border: 2px solid #11999E;
+    border-radius: 10px;
+    background: #ffffff;
+    width: 100%;
 }
 .left_box textarea{
-    padding: 15px;
+    padding: 14px 16px;
     border: 2px solid #11999E;
     outline: none;
+    border-radius: 10px;
+    min-height: 140px;
+    resize: vertical;
+    background: #ffffff;
+    width: 100%;
 }
 .left_box .btn{
     margin-left: 0%;

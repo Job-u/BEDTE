@@ -64,9 +64,6 @@
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
-            position: sticky;
-            bottom: 0;
-            background: white;
             padding-top: 1rem;
             border-top: 1px solid #eee;
         }
@@ -275,9 +272,9 @@
             echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
          }
          // 2. Validate Password Strength
-         else if (strlen($password) > 8 || !preg_match('/[A-Z]/', $password)) {
+         else if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password)) {
             echo "<div class='message'>
-                      <p>Password must be 8 characters or less and contain at least one capital letter.</p>
+                      <p>Password must be at least 8 characters and contain at least one capital letter.</p>
                   </div> <br>";
             echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
          }
@@ -334,12 +331,12 @@
                 <div class="field input">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" autocomplete="off" required>
-                    <small>Must be at least 8 characters long and contain one capital letter.</small>
+                    <small id="passwordHelp">Must be at least 8 characters and contain one capital letter.</small>
                 </div>
 
                 <div class="field terms-field">
     <div class="terms-checkbox">
-        <input type="checkbox" name="terms_accepted" id="terms_accepted" required>
+        <input type="checkbox" name="terms_accepted" id="terms_accepted" disabled>
         <label for="terms_accepted">I agree to the</label>
         <a href="#" onclick="showTerms(event)" class="terms-link">Terms and Conditions</a>
     </div>
@@ -431,31 +428,60 @@
     const termsCheckbox = document.getElementById('terms_accepted');
     const registerBtn = document.getElementById('registerBtn');
     const termsModal = document.getElementById('termsModal');
+    const passwordInput = document.getElementById('password');
+    const passwordHelp = document.getElementById('passwordHelp');
 
-    // Update button state based on checkbox
-    termsCheckbox.addEventListener('change', function() {
-        registerBtn.disabled = !this.checked;
-        if(this.checked) {
-            registerBtn.style.opacity = '1';
-        } else {
-            registerBtn.style.opacity = '0.5';
-        }
+    // Initially disabled until user accepts terms via modal
+    registerBtn.disabled = true;
+    registerBtn.style.opacity = '0.5';
+
+    // Live password validation feedback
+    passwordInput.addEventListener('input', function() {
+        const value = this.value;
+        const valid = value.length >= 8 && /[A-Z]/.test(value);
+        passwordHelp.textContent = valid ? 'Password looks good.' : 'Must be at least 8 characters and contain one capital letter.';
+        passwordHelp.style.color = valid ? '#0E9F6E' : '#666';
     });
 
     function showTerms(event) {
         event.preventDefault();
         termsModal.style.display = 'flex';
+        // Hide buttons until scrolled to bottom
+        const buttons = document.querySelector('.terms-buttons');
+        buttons.style.display = 'none';
+        const content = document.querySelector('.terms-content');
+        content.scrollTop = 0;
+        // If content doesn't overflow, show buttons immediately
+        const maybeShowButtons = () => {
+            const scrollable = content.scrollHeight > content.clientHeight + 2; // tolerance
+            if (!scrollable) {
+                buttons.style.display = 'flex';
+                content.removeEventListener('scroll', onScroll);
+            }
+        };
+        const onScroll = () => {
+            const atBottom = Math.ceil(content.scrollTop + content.clientHeight) >= content.scrollHeight;
+            if (atBottom) {
+                buttons.style.display = 'flex';
+                content.removeEventListener('scroll', onScroll);
+            }
+        };
+        content.addEventListener('scroll', onScroll);
+        // Re-check after layout
+        setTimeout(maybeShowButtons, 50);
     }
 
     function closeTerms() {
         termsModal.style.display = 'none';
         termsCheckbox.checked = false;
+        termsCheckbox.disabled = true;
         registerBtn.disabled = true;
         registerBtn.style.opacity = '0.5';
     }
 
     function acceptTerms() {
         termsModal.style.display = 'none';
+        termsCheckbox.disabled = false;
         termsCheckbox.checked = true;
         registerBtn.disabled = false;
         registerBtn.style.opacity = '1';

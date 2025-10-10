@@ -27,9 +27,26 @@ $result = mysqli_query($con, $query);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css">
 </head>
 <body>
-    <!-- Same navbar as teacherdashboard.php -->
+    <!-- Navbar -->
     <nav class="navbar">
-        <!-- ... navbar content ... -->
+        <a href="teacherdashboard.php">
+            <div class="logo">
+                <img src="../img/LOGO.png" alt="">
+                <span>BEDTE</span>
+            </div>
+        </a>
+        <ul class="nav_items" id="nav_links">
+            <div class="item">
+                <li><a href="manage_scores.php">Student Scores</a></li>
+                <li><a href="manage_questions.php">Manage Questions</a></li>
+            </div>
+            <div class="nav_btn">
+                <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
+            </div>
+        </ul>
+        <div class="nav_menu" id="menu_btn">
+            <i class="ri-menu-line"></i>
+        </div>
     </nav>
 
     <section class="sec">
@@ -50,7 +67,8 @@ $result = mysqli_query($con, $query);
             </select>
         </div>
 
-        <table class="scores-table">
+        <div class="scores-table-wrapper">
+        <table class="scores-table data-table">
             <thead>
                 <tr>
                     <th>Student Name</th>
@@ -72,6 +90,7 @@ $result = mysqli_query($con, $query);
                 <?php endwhile; ?>
             </tbody>
         </table>
+        </div>
     </section>
 
     <script>
@@ -95,5 +114,7 @@ $result = mysqli_query($con, $query);
             });
         }
     </script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="../js/homepage.js"></script>
 </body>
 </html>

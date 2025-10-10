@@ -19,14 +19,14 @@
 <body>
 <section class="background" id="home">
 <nav class="navbar">
-<a href="../userdashboard/userdashboard.php"><div class="logo">
+<a href="../teacherdashboard/teacherdashboard.php"><div class="logo">
         <img src="../img/LOGO.png" alt="">
         <span>BEDTE</span>
     </div></a>
     <ul class="nav_items" id="nav_links">
             <div class="item">
-        <li><a href="../aboutus/aboutus.php">Project Team</a></li>
-        <li><a href="../contact/contactus.php">Contact Us</a></li>
+        <li><a href="../teacherdashboard/manage_scores.php">Student Scores</a></li>
+        <li><a href="../teacherdashboard/manage_questions.php">Manage Questions</a></li>
             </div>
 
             <?php 
@@ -41,7 +41,7 @@
                 $res_id = $result['Id'];
             }
             
-            echo "<a href='../profile/edit.php?Id=$res_id'>$res_Uname</a>";
+            echo "<a href='../profile/editteacher.php?Id=$res_id'>$res_Uname</a>";
             ?>
 
         <div class="nav_btn">
@@ -67,10 +67,8 @@
 
                 $id = $_SESSION['id'];
 
-                // Build base update
                 $update_sql = "UPDATE users SET Username='$username', Email='$email', Age='$age'";
 
-                // Optional password update if provided
                 if ($new_password !== '') {
                     if (strlen($new_password) < 8 || !preg_match('/[A-Z]/', $new_password)) {
                         echo "<div class='message'>
@@ -129,6 +127,7 @@
                     <label for="age">Age</label>
                     <input type="number" name="age" id="age" value="<?php echo $res_Age; ?>" autocomplete="off" required>
                 </div>
+                
                 <div class="field input">
                     <label for="new_password">New Password (optional)</label>
                     <input type="password" name="new_password" id="new_password" autocomplete="off" placeholder="At least 8 chars, 1 capital letter">
@@ -137,7 +136,6 @@
                     <label for="confirm_password">Confirm New Password</label>
                     <input type="password" name="confirm_password" id="confirm_password" autocomplete="off">
                 </div>
-                
                 <div class="field">
                     
                     <input type="submit" class="btn" name="submit" value="Update" required>

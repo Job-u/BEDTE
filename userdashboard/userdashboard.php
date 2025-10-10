@@ -107,23 +107,21 @@
     <div class="footer_col">
         <h4>about</h4>
         <ul class="footer_links">
-            <li><a href="#">about us</a></li>
+            <li><a href="https://github.com/Job-u/BEDTE" target="_blank">about us</a></li>
             <li><a href="#">features</a></li>
         </ul>
     </div>
     <div class="footer_col">
         <h4>company</h4>
         <ul class="footer_links">
-            <li><a href="#">my BEDTE</a></li>
-            <li><a href="#">partners</a></li>
+            <li><a href="https://www.facebook.com/laspinas.sti.edu" target="_blank">partners</a></li>
         </ul>
     </div>
     <div class="footer_col">
         <h4>support</h4>
         <ul class="footer_links">
-            <li><a href="edit.php">account</a></li>
-            <li><a href="#">support center</a></li>
-            <li><a href="#">feedback</a></li>
+            <li><a href="../profile/edit.php">account</a></li>
+            <li><a href="../contact/contactus.php">support center</a></li>
         </ul>
     </div>
     <div class="footer_col">
@@ -133,9 +131,9 @@
         </div>
 
         <ul class="footer_socials">
-            <li><a href="#"><i class="ri-instagram-fill"></i></a></li>
-            <li><a href="#"><i class="ri-facebook-fill"></i></a></li>
-            <li><a href="#"><i class="ri-twitter-fill"></i></a></li>
+            <li><a href="https://www.instagram.com/bedte_socials" target="_blank"><i class="ri-instagram-fill"></i></a></li>
+            <li><a href="https://www.facebook.com/share/1EG68fR2Vf/" target="_blank"><i class="ri-facebook-fill"></i></a></li>
+            <li><a href="https://x.com/BEDTE_x" target="_blank"><i class="ri-twitter-fill"></i></a></li>
         </ul>
     </div>
 </div>
@@ -149,3 +147,4 @@
 <script src="https://unpkg.com/scrollreveal"></script>
 <script src="../js/homepage.js"></script>
 </body>
+

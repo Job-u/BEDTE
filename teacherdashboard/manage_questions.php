@@ -70,7 +70,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <span>BEDTE</span>
             </div>
         </a>
-        <ul class="nav_items">
+        <ul class="nav_items" id="nav_links">
             <div class="item">
                 <li><a href="manage_scores.php">Student Scores</a></li>
                 <li><a href="manage_questions.php">Manage Questions</a></li>
@@ -79,6 +79,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
             </div>
         </ul>
+        <div class="nav_menu" id="menu_btn">
+            <i class="ri-menu-line"></i>
+        </div>
     </nav>
 
     <section class="sec">
@@ -151,7 +154,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </select>
                 </div>
 
-                <table class="data-table">
+                <div class="scores-table-wrapper">
+                <table class="data-table scores-table">
                     <thead>
                         <tr>
                             <th>Question</th>
@@ -178,9 +182,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </section>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="../js/homepage.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
