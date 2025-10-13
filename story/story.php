@@ -78,7 +78,7 @@
                         <h4>Ang Aso ni Dada Agò</h4>
                         <p>Meet Kuyéng, Dada Agò's dog who loves visiting the market and eating leftover meat. A simple story about a beloved pet.</p>
                         <div class="story-meta">
-                            <span class="duration"><i class="ri-time-line"></i> 5 minutes</span>
+                            <span class="duration"><i class="ri-time-line"></i> 1 minutes</span>
                             <span class="difficulty"><i class="ri-star-line"></i> Level 1</span>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <h4>Si Lipéng at ang Ibon</h4>
                         <p>Lipéng climbs a tree to see a bird's nest, but when she touches the bird, it flies away, leaving her sad.</p>
                         <div class="story-meta">
-                            <span class="duration"><i class="ri-time-line"></i> 6 minutes</span>
+                            <span class="duration"><i class="ri-time-line"></i> 1 minutes</span>
                             <span class="difficulty"><i class="ri-star-line"></i> Level 1</span>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                         <h4>Ang Batang si Tagu-Tagu</h4>
                         <p>Follow Tagu-Tagu's daily life - going to school, fishing for crabs, and helping his family by selling them to buy rice.</p>
                         <div class="story-meta">
-                            <span class="duration"><i class="ri-time-line"></i> 7 minutes</span>
+                            <span class="duration"><i class="ri-time-line"></i> 2 minutes</span>
                             <span class="difficulty"><i class="ri-star-line"></i> Level 2</span>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                         <h4>Ang Usa</h4>
                         <p>A story about a deer that Boboy Eda encounters while hunting. The deer runs away when shot with an arrow.</p>
                         <div class="story-meta">
-                            <span class="duration"><i class="ri-time-line"></i> 4 minutes</span>
+                            <span class="duration"><i class="ri-time-line"></i> 1 minutes</span>
                             <span class="difficulty"><i class="ri-star-line"></i> Level 1</span>
                         </div>
                     </div>

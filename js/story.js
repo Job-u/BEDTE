@@ -133,7 +133,7 @@ const storiesData = {
         title: "Asò ni Dada Agò",
         subtitle: "Ang Aso ni Dada Agò",
         image: "../img/story1_1.png",
-        audio: "../audio/story1.mp3",
+        audio: "../audio/Story_Audio/story1.mp3",
         images: [
             "../img/story1_2.png",
             "../img/story1_3.png",
@@ -193,7 +193,7 @@ meunas ye kaya tinumabe atahud
         title: "Ti Lipéng sakay tu Manok",
         subtitle: "Si Lipéng at ang Ibon",
         image: "../img/story2_1.png",
-        audio: "../audio/story2.mp3",
+        audio: "../audio/Story_Audio/story2.mp3",
         images: [
 
             "../img/story2_2.png",
@@ -234,7 +234,7 @@ melungkot a inumule ti lipéng.
         title: "Tu Anak ti Tagu-Tagu",
         subtitle: "Ang Batang si Tagu-Tagu",
         image: "../img/story3_1.png",
-        audio: "../audio/story3.mp3",
+        audio: "../audio/Story_Audio/story3.mp3",
         images: [
 
             "../img/story3_2.png",
@@ -283,7 +283,7 @@ penég deponan me du agum a nabuhay a agima.
         title: "To Ogsa",
         subtitle: "Ang Usa",
         image: "../img/story4_1.png",
-        audio: "../audio/story4.mp3",
+        audio: "../audio/Story_Audio/story4.mp3",
         images: [
             "../img/story4_2.png",
             "../img/story4_3.png",
