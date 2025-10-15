@@ -225,9 +225,9 @@ inumegbe tu manok.
 melungkot a inumule ti lipéng.
 (malungkot na umuwi si lipéng.)`,
         wordCount: 34,
-        level: "Level 1",
+        level: "Level 2",
         language: "Agta Casiguran",
-        gradeLevel: "Level 1",
+        gradeLevel: "Level 2",
         ageAppropriate: true
     },
     3: {
@@ -274,9 +274,9 @@ ipamugtong ko ye ta biges.
 penég deponan me du agum a nabuhay a agima.
 (pinag saluhan namin ang mga natirang alimango.)`,
         wordCount: 41,
-        level: "Level 2",
+        level: "Level 1",
         language: "Agta Casiguran",
-        gradeLevel: "Level 2",
+        gradeLevel: "Level 1",
         ageAppropriate: true
     },
     4: {

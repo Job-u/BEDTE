@@ -20,7 +20,7 @@ function updateGameQuestionsFile($con) {
     $startingNumbers = [
         'Multiple Choice' => [
             'EASY' => 6,    // Default has 5 questions
-            'MEDIUM' => 6,  // Default has 4 questions
+            'MEDIUM' => 6,  // Default has 5 questions
             'HARD' => 6     // Default has 5 questions
         ],
         'Fill In The Blank' => [

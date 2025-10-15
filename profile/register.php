@@ -359,7 +359,7 @@
             <h2>Terms and Conditions</h2>
             <div class="terms-text">
                 <h3>1. Introduction</h3>
-                <p>Welcome to BEDTE (Bridging Endangered Dialect to Tagalog and English). By creating an account, you agree to these terms and conditions.</p>
+                <p>Welcome to BEDTE (Bridging Endangered Dialect to Tagalog or English). By creating an account, you agree to these terms and conditions.</p>
 
                 <h3>2. Data Collection and Usage</h3>
                 <p>We collect and store the following information:</p>
@@ -378,7 +378,7 @@
                     <li>Tracking your learning progress</li>
                     <li>Improving our educational content and game features</li>
                     <li>Providing personalized learning experiences</li>
-                    <li>Academic research purposes in language learning</li>
+                    <li>Academic research purposes in language preservation</li>
                 </ul>
 
                 <h3>4. User Privacy</h3>

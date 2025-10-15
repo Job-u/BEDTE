@@ -32,7 +32,7 @@
                     $_SESSION['role'] = $row['Role'];
                 }else{
                     echo "<div class='message'>
-                      <p>Wrong Username or Password</p>
+                      <p>Wrong Email or Password</p>
                        </div> <br>";
                    echo "<a href='login.php'><button class='btn'>Go Back</button>";
          
