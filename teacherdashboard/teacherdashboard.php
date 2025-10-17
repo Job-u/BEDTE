@@ -138,6 +138,48 @@ include("../phpsql/config.php");
             </div>
         </div>
     </section>
+
+    <footer>
+
+<div class="sec footer_container">
+    <div class="footer_col">
+        <h4>about</h4>
+        <ul class="footer_links">
+            <li><a href="../aboutus/aboutusteacher.php">project team</a></li>
+            <li><a href="#">features</a></li>
+        </ul>
+    </div>
+    <div class="footer_col">
+        <h4>company</h4>
+        <ul class="footer_links">
+            <li><a href="https://www.facebook.com/laspinas.sti.edu" target="_blank">partners</a></li>
+        </ul>
+    </div>
+    <div class="footer_col">
+        <h4>support</h4>
+        <ul class="footer_links">
+            <li><a href="../profile/editteacher.php">account</a></li>
+            <li><a href="../contact/contactusteacher.php">support center</a></li>
+        </ul>
+    </div>
+    <div class="footer_col">
+        <div class="footer_logo logo">
+            <img src="../img/LOGO.png" alt="">
+            <span>BEDTE</span>
+        </div>
+
+        <ul class="footer_socials">
+            <li><a href="https://www.instagram.com/bedte_socials" target="_blank"><i class="ri-instagram-fill"></i></a></li>
+            <li><a href="https://www.facebook.com/share/1EG68fR2Vf/" target="_blank"><i class="ri-facebook-fill"></i></a></li>
+            <li><a href="https://x.com/BEDTE_x" target="_blank"><i class="ri-twitter-fill"></i></a></li>
+        </ul>
+    </div>
+</div>
+<div class="footer_bar">
+    copyright @ 2024 BEDTE Developers. All right reserved
+</div>
+</footer>
+
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../js/homepage.js"></script>
 </body>

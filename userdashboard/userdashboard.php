@@ -107,7 +107,7 @@
     <div class="footer_col">
         <h4>about</h4>
         <ul class="footer_links">
-            <li><a href="https://github.com/Job-u/BEDTE" target="_blank">about us</a></li>
+            <li><a href="../aboutus/aboutusteacher.php">project team</a></li>
             <li><a href="#">features</a></li>
         </ul>
     </div>

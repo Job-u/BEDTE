@@ -1,6 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 /* Imports the 'Varela Round' font from Google Fonts to be used in your styles */
 
+.password-wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input{
+    width: 100%;
+    padding-right: 45px;
+    height: 40px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-left: 10px;
+    outline: none;
+}
+
+.password-wrapper i{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    font-size: 1.3rem;
+    transition: color 0.3s ease;
+}
+.password-wrapper i:hover{
+    color: #11999E;
+}
+
+.password-wrapper input:focus + i {
+  color: #11999E;
+}
+
 * {
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
     margin: 0%; /* Removes default margin for all elements */

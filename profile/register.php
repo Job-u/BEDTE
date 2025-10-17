@@ -5,8 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style/profile.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css" rel="stylesheet">
     <title>Register</title>
     <style>
+.password-wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input{
+    width: 100%;
+    padding-right: 45px;
+    height: 40px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-left: 10px;
+    outline: none;
+}
+
+.password-wrapper i{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    font-size: 1.3rem;
+    transition: color 0.3s ease;
+}
+.password-wrapper i:hover{
+    color: #11999E;
+}
+
+.password-wrapper input:focus + i {
+  color: #11999E;
+}
+
 /* Terms and Conditions Checkbox Styles */
         .terms-modal {
             display: none;
@@ -260,6 +296,7 @@
             $email = $_POST['email'];
             $age = $_POST['age'];
             $password = $_POST['password'];
+            $confirm_password = $_POST['confirm_password'];
             $role = $_POST['role'];
 
          //--- VALIDATION ADDED ---
@@ -278,8 +315,15 @@
                   </div> <br>";
             echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
          }
+         else if ($password !== $confirm_password ) {
+            echo "<div class='message'>
+                         <p>Password and confirm password do not match.</p>
+                      </div> <br>";
+            echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
+         }
+
          else {
-             //verifying the unique email
+             // verifying the unique email
              $verify_query = mysqli_query($con,"SELECT Email FROM users WHERE Email='$email'");
 
              if(mysqli_num_rows($verify_query) !=0 ){
@@ -330,8 +374,18 @@
                 </div>
                 <div class="field input">
                     <label for="password">Password</label>
+                    <div class="password-wrapper">
                     <input type="password" name="password" id="password" autocomplete="off" required>
+                    <i class="ri-eye-off-line togglePassword" id="togglePassword"></i>
+                    </div>
                     <small id="passwordHelp">Must be at least 8 characters and contain one capital letter.</small>
+                </div>
+                <div class="field input">
+                    <label for="confirm_password">Confirm Password</label>
+                    <div class="password-wrapper">
+                    <input type="password" name="confirm_password" id="confirm_password" autocomplete="off" required>
+                    <i class="ri-eye-off-line togglePassword" id="toggleConfirmPassword"></i>
+                    </div>
                 </div>
 
                 <div class="field terms-field">
@@ -361,7 +415,27 @@
                 <h3>1. Introduction</h3>
                 <p>Welcome to BEDTE (Bridging Endangered Dialect to Tagalog or English). By creating an account, you agree to these terms and conditions.</p>
 
-                <h3>2. Data Collection and Usage</h3>
+                <h3>2. Data Privacy and Protection</h3>
+                <p>
+                In compliance with the Data Privacy Act of 2012 (Republic Act No. 10173), BEDTE (Bridging Endangered Dialect to Tagalog or English) is committed to protecting your personal data.  
+                We ensure that all personal information collected is processed lawfully, fairly, and transparently, and used only for legitimate educational and research purposes related to language preservation.
+                </p>
+
+                <p>
+                By creating an account, you give your consent to the collection, storage, and processing of your personal data for the purposes outlined in this document. You also have the right to:
+                </p>
+
+                <ul>
+                    <li>Access your personal information upon request</li>
+                    <li>Correct or update inaccurate data</li>
+                    <li>Withdraw consent or request deletion of your data, subject to applicable laws</li>
+                </ul>
+
+                <p>
+                All data will be securely stored and handled with the highest level of confidentiality to ensure your privacy and protection.
+                </p>
+
+                <h3>3. Data Collection and Usage</h3>
                 <p>We collect and store the following information:</p>
                 <ul>
                     <li>Your username and email address</li>
@@ -371,7 +445,7 @@
                     <li>Usage patterns and interaction with learning materials</li>
                 </ul>
 
-                <h3>3. Purpose of Data Collection</h3>
+                <h3>4. Purpose of Data Collection</h3>
                 <p>Your data is collected and used for:</p>
                 <ul>
                     <li>Creating and maintaining your user account</li>
@@ -381,7 +455,7 @@
                     <li>Academic research purposes in language preservation</li>
                 </ul>
 
-                <h3>4. User Privacy</h3>
+                <h3>5. User Privacy</h3>
                 <p>We are committed to protecting your privacy:</p>
                 <ul>
                     <li>Your personal information will not be shared with third parties</li>
@@ -389,7 +463,7 @@
                     <li>You can request to view or delete your data at any time</li>
                 </ul>
 
-                <h3>5. User Responsibilities</h3>
+                <h3>6. User Responsibilities</h3>
                 <p>As a user, you agree to:</p>
                 <ul>
                     <li>Provide accurate and truthful information</li>
@@ -398,7 +472,7 @@
                     <li>Respect intellectual property rights</li>
                 </ul>
 
-                <h3>6. Platform Usage</h3>
+                <h3>7. Platform Usage</h3>
                 <p>The platform includes:</p>
                 <ul>
                     <li>Interactive language learning games</li>
@@ -407,7 +481,7 @@
                     <li>Educational content and materials</li>
                 </ul>
 
-                <h3>7. Content Usage</h3>
+                <h3>8. Content Usage</h3>
                 <p>All content, including:</p>
                 <ul>
                     <li>Language translations</li>
@@ -424,12 +498,31 @@
 
 
 
-     <script>
+    <script>
+        
     const termsCheckbox = document.getElementById('terms_accepted');
     const registerBtn = document.getElementById('registerBtn');
     const termsModal = document.getElementById('termsModal');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
     const passwordHelp = document.getElementById('passwordHelp');
+    const confirmpasswordHelp = document.getElementById('confirmpasswordHelp');
+
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        this.classList.toggle('ri-eye-off-line');
+        this.classList.toggle('ri-eye-line');
+    });
+
+    toggleConfirmPassword.addEventListener('click', function() {
+        const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+        confirmPasswordInput.type = type;
+        this.classList.toggle('ri-eye-off-line');
+        this.classList.toggle('ri-eye-line');
+    });
 
     // Initially disabled until user accepts terms via modal
     registerBtn.disabled = true;
@@ -439,7 +532,7 @@
     passwordInput.addEventListener('input', function() {
         const value = this.value;
         const valid = value.length >= 8 && /[A-Z]/.test(value);
-        passwordHelp.textContent = valid ? 'Password looks good.' : 'Must be at least 8 characters and contain one capital letter.';
+        passwordHelp.textContent = valid ? 'Password meets requirements.' : 'Must be at least 8 characters and contain one capital letter.';
         passwordHelp.style.color = valid ? '#0E9F6E' : '#666';
     });
 
