@@ -147,19 +147,36 @@ function showQuestion(index) {
     } else if (activeGameMode === 'Fill In The Blank') {
         optionList.innerHTML = `
             <div class="fill-in-container">
-                <input type="text" class="fill-input" placeholder="Type your answer...">
-                <button class="fill-submit-btn">Submit</button>
+                <input type="text" class="fill-input" placeholder="Type your answer here..." required>
+                <button class="fill-submit-btn" disabled>Submit Answer</button>
             </div>`;
         
         const fillInput = optionList.querySelector('.fill-input');
         const fillSubmitBtn = optionList.querySelector('.fill-submit-btn');
 
+        // Enable/disable submit button based on input
+        fillInput.addEventListener('input', () => {
+            const hasValue = fillInput.value.trim().length > 0;
+            fillSubmitBtn.disabled = !hasValue;
+            fillInput.classList.remove('error');
+        });
+
         const handleSubmit = () => {
-            checkFillAnswer(fillInput.value, currentQuestions[index].answer);
+            const answer = fillInput.value.trim();
+            if (answer === '') {
+                fillInput.classList.add('error');
+                fillInput.placeholder = 'Please enter an answer!';
+                return;
+            }
+            checkFillAnswer(answer, currentQuestions[index].answer);
         };
 
         fillSubmitBtn.onclick = handleSubmit;
-        fillInput.onkeyup = (e) => { if (e.key === 'Enter') handleSubmit(); };
+        fillInput.onkeypress = (e) => {
+            if (e.key === 'Enter' && !fillSubmitBtn.disabled) {
+                handleSubmit();
+            }
+        };
     }
     
     updateQuestionCounter(questionNumb);
@@ -192,20 +209,28 @@ function optionSelected(answer) {
 }
 
 function checkFillAnswer(userAnswer, correctAnswer) {
+    if (!userAnswer.trim()) {
+        return; // Don't process empty answers
+    }
+
     const trimmedUserAnswer = userAnswer.trim().toLowerCase();
     const trimmedCorrectAnswer = correctAnswer.toLowerCase();
+
+    // Disable input and button immediately
+    const fillInput = document.querySelector('.fill-input');
+    const fillSubmitBtn = document.querySelector('.fill-submit-btn');
+    fillInput.disabled = true;
+    fillSubmitBtn.disabled = true;
+
+    // Add visual feedback
+    fillInput.style.backgroundColor = trimmedUserAnswer === trimmedCorrectAnswer ? '#d4edda' : '#f8d7da';
+    fillInput.style.borderColor = trimmedUserAnswer === trimmedCorrectAnswer ? '#28a745' : '#dc3545';
 
     if (trimmedUserAnswer === trimmedCorrectAnswer) {
         userScore++;
     }
 
-    // Disable input and button after submission
-    const fillInput = document.querySelector('.fill-input');
-    const fillSubmitBtn = document.querySelector('.fill-submit-btn');
-    if(fillInput) fillInput.disabled = true;
-    if(fillSubmitBtn) fillSubmitBtn.disabled = true;
-
-    // Automatically move to the next question or show result
+    // Move to next question after delay
     setTimeout(() => {
         if (questionCount < currentQuestions.length - 1) {
             questionCount++;
@@ -214,8 +239,8 @@ function checkFillAnswer(userAnswer, correctAnswer) {
         } else {
             showResult();
         }
-        updateHeaderScore(); // Update score for the next question
-    }, 1000); // Wait 1 second before moving on
+        updateHeaderScore();
+    }, 1500);
 }
 
 function showResult() {
@@ -267,3 +292,37 @@ async function saveScore(finalScore, gameMode, difficulty) {
         console.error('Error saving score:', error);
     }
 }
+
+// Add this function to validate the input
+function validateFillInBlankAnswer() {
+    const input = document.querySelector('.fill-blank-input');
+    if (!input) return true; // Return true if not in fill-in-blank mode
+    
+    const answer = input.value.trim();
+    if (answer === '') {
+        input.classList.add('error');
+        input.placeholder = 'Answer required!';
+        return false;
+    }
+    input.classList.remove('error');
+    return true;
+}
+
+// Modify the next button click handler
+nextBtn.addEventListener('click', () => {
+    if (quizState.currentQuestionIndex >= quizState.questions.length) {
+        showResultBox();
+        return;
+    }
+
+    // Add validation for fill in the blank
+    if (quizState.gameMode === 'Fill In The Blank') {
+        if (!validateFillInBlankAnswer()) {
+            return; // Prevent proceeding if validation fails
+        }
+    }
+
+    // ...rest of the next button logic...
+});
+
+// Add CSS for error state
