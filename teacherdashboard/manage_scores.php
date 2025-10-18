@@ -13,7 +13,7 @@ $query = "SELECT u.Username, s.game_mode, s.difficulty, s.score, s.played_on
           FROM scores s 
           JOIN users u ON s.user_id = u.Id 
           ORDER BY s.played_on DESC";
-$result = mysqli_query($con, $query);
+$scores_result = mysqli_query($con, $query);
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +40,22 @@ $result = mysqli_query($con, $query);
                 <li><a href="manage_scores.php">Student Scores</a></li>
                 <li><a href="manage_questions.php">Manage Questions</a></li>
             </div>
+
+            <?php 
+                
+                $id = $_SESSION['id'];
+                $user_query = mysqli_query($con,"SELECT * FROM users WHERE Id=$id");
+
+                while($user_result = mysqli_fetch_assoc($user_query)){
+                    $res_Uname = $user_result['Username'];
+                    $res_Email = $user_result['Email'];
+                    $res_Age = $user_result['Age'];
+                    $res_id = $user_result['Id'];
+                }
+                
+                echo "<a href='../profile/editteacher.php?Id=$res_id'>$res_Uname</a>";
+                ?>
+
             <div class="nav_btn">
                 <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
             </div>
@@ -79,7 +95,7 @@ $result = mysqli_query($con, $query);
                 </tr>
             </thead>
             <tbody>
-                <?php while($row = mysqli_fetch_assoc($result)): ?>
+                <?php while($row = mysqli_fetch_assoc($scores_result)): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($row['Username']); ?></td>
                     <td><?php echo htmlspecialchars($row['game_mode']); ?></td>
