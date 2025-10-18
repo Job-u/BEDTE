@@ -30,11 +30,28 @@
                 <span>BEDTE</span>
             </div>
         </a>
+
         <ul class="nav_items" id="nav_links">
             <div class="item">
                 <li><a href="../teacherdashboard/manage_scores.php">Student Scores</a></li>
                 <li><a href="../teacherdashboard/manage_questions.php">Manage Questions</a></li>
             </div>
+
+            <?php 
+                
+                $id = $_SESSION['id'];
+                $query = mysqli_query($con,"SELECT*FROM users WHERE Id=$id");
+    
+                while($result = mysqli_fetch_assoc($query)){
+                    $res_Uname = $result['Username'];
+                    $res_Email = $result['Email'];
+                    $res_Age = $result['Age'];
+                    $res_id = $result['Id'];
+                }
+                
+                echo "<a href='../profile/editteacher.php?Id=$res_id'>$res_Uname</a>";
+                ?>
+
             <div class="nav_btn">
                 <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
             </div>
