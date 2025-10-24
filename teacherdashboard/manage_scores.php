@@ -39,6 +39,7 @@ $scores_result = mysqli_query($con, $query);
             <div class="item">
                 <li><a href="manage_scores.php">Student Scores</a></li>
                 <li><a href="manage_questions.php">Manage Questions</a></li>
+                <li><a href="manage_phrases.php" class="active">Manage Phrases</a></li>
             </div>
 
             <?php 

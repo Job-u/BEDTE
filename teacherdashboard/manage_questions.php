@@ -72,11 +72,13 @@ while ($row = mysqli_fetch_assoc($result)) {
         </a>
         <ul class="nav_items" id="nav_links">
             <div class="item">
+            <div class="item">
                 <li><a href="manage_scores.php">Student Scores</a></li>
                 <li><a href="manage_questions.php">Manage Questions</a></li>
+                <li><a href="manage_phrases.php" class="active">Manage Phrases</a></li>
             </div>
 
-                        <?php 
+                <?php 
                 
                 $id = $_SESSION['id'];
                 $query = mysqli_query($con,"SELECT*FROM users WHERE Id=$id");
@@ -90,7 +92,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 
                 echo "<a href='../profile/editteacher.php?Id=$res_id'>$res_Uname</a>";
                 ?>
-                
+
             <div class="nav_btn">
                 <a href="../phpsql/logout.php"><button class="btn btn2">Logout</button></a>
             </div>

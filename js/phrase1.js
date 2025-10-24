@@ -1,33 +1,129 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize with empty arrays first
-    let items = [];
-    let translations = {};
-
     // Function to initialize the phrase of the day
-    function initPhraseOfTheDay(phrases, trans) {
-        items = phrases || [];
-        translations = trans || {};
-        
-        if (!items.length) {
+    function initPhraseOfTheDay(items, translations) {
+        if (!items || !items.length) {
             console.error('No phrases available');
-            useFallbackData();
             return;
         }
-        
-        console.log('Initialized with items:', items); // Debug log
-        console.log('Translations:', translations);    // Debug log
-        
+
+        function getDailyIndex(length) {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            return dayOfYear % length;
+        }
+
+function setPhraseOfTheDay() {
+    if (!items.length) return;
+    const idx = getDailyIndex(items.length);
+    const entry = items[idx];
+    const phraseEl = document.getElementById('daily-phrase');
+    const translationEl = document.getElementById('daily-translation');
+    const audio = document.getElementById('phrase-audio');
+
+    const t = translations[entry.key] || { filipino: '', casiguran_agta: '' };
+    phraseEl.textContent = t.casiguran_agta && t.casiguran_agta.trim().length > 0 ? t.casiguran_agta : entry.key;
+    
+    const translationParts = [];
+    translationParts.push(`English: ${entry.key}`);
+    if (t.filipino) translationParts.push(`Filipino: ${t.filipino}`);
+    translationEl.textContent = translationParts.join('  |  ');
+
+    // Clean up the path
+    let audioPath = entry.path;
+    
+    // If the path has spaces, replace them with %20
+    if (audioPath.includes(' ')) {
+        const pathParts = audioPath.split('/');
+        const filename = pathParts.pop();
+        audioPath = [...pathParts, encodeURIComponent(filename)].join('/');
+    }
+    
+    // Create a new source element
+    const source = document.createElement('source');
+    source.src = audioPath;
+    source.type = 'audio/wav';
+    
+    // Clear any existing sources
+    while (audio.firstChild) {
+        audio.removeChild(audio.firstChild);
+    }
+    
+    // Add the new source
+    audio.appendChild(source);
+    
+    // Load the new source
+    audio.load().catch(error => {
+        console.error('Error loading audio:', error);
+        console.log('Attempted to load:', audioPath);
+    });
+}
+
+function setupPlayButton() {
+    const btn = document.getElementById('phrase-play');
+    const audio = document.getElementById('phrase-audio');
+    const icon = btn.querySelector('i');
+    const labelEl = btn.querySelector('.audio-play-label');
+
+    function setState(playing) {
+        icon.setAttribute('class', playing ? 'ri-pause-circle-fill' : 'ri-play-circle-fill');
+        btn.setAttribute('aria-label', playing ? 'Pause Audio' : 'Play Audio');
+        btn.title = playing ? 'Pause audio' : 'Play audio';
+        if (labelEl) labelEl.textContent = playing ? 'Pause Audio' : 'Play Audio';
+    }
+
+    // Add error handling
+    audio.addEventListener('error', function(e) {
+        console.error('Audio error:', e);
+        console.error('Audio source:', audio.currentSrc);
+        setState(false);
+    });
+
+    btn.addEventListener('click', async function() {
+        try {
+            if (audio.paused) {
+                await audio.play();
+                setState(true);
+            } else {
+                audio.pause();
+                setState(false);
+            }
+        } catch (error) {
+            console.error('Playback failed:', error);
+            setState(false);
+        }
+    });
+
+    audio.addEventListener('ended', () => setState(false));
+    audio.addEventListener('pause', () => setState(false));
+    audio.addEventListener('play', () => setState(true));
+}
+
         setPhraseOfTheDay();
         setupPlayButton();
     }
 
-    // Fallback data function
-    function useFallbackData() {
-        console.log('Using fallback data');
-        const base = '..';
+    // Load phrases from the server
+fetch('../phpsql/get_phrases.php')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Initialize with the data from the server
+        initPhraseOfTheDay(data.items, data.translations);
+    })
+    .catch(error => {
+        console.error('Error loading phrases:', error);
+        // Fallback to hardcoded data if the server request fails
+        const base = '..'; // Define base for audio paths
         const fallbackData = {
             items: [
-        // Greetings
+                // Greetings
         { key: 'What is your name?', path: `${base}/audio/Greetings/what is your name.wav` },
         { key: 'Goodbye', path: `${base}/audio/Greetings/goodbye.wav` },
         { key: 'Thank you', path: `${base}/audio/Greetings/thank you.wav` },
@@ -125,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { key: 'It is my garden', path: `${base}/audio/Giving_Directions/it is my garden.wav` }
             ],
             translations: {
-         // Greetings and Common Phrases
+        // Greetings and Common Phrases
         'What is your name?': { filipino: 'Ano ang pangalan mo?', casiguran_agta: 'Anya i ngahen moa' },
         'Goodbye': { filipino: 'Paalam.', casiguran_agta: 'Naydén kako dén' },
         'Thank you': { filipino: 'Maraming salamat.', casiguran_agta: 'Me ado a salamat' },
@@ -213,172 +309,92 @@ document.addEventListener('DOMContentLoaded', function() {
         'It is my garden': { filipino: 'Sa akin ang halamanan', casiguran_agta: 'Ko o ko a sikaw' }
             }
         };
-        
-        items = fallbackData.items;
-        translations = fallbackData.translations;
-        
-        setPhraseOfTheDay();
-        setupPlayButton();
+        initPhraseOfTheDay(fallbackData.items, fallbackData.translations);
+    });
+});
+
+//navbar scroll
+window.addEventListener('scroll', function(){
+    let navbar = document.querySelector('.navbar');
+    if(this.window.scrollY > 20){
+        navbar.classList.add('scrolled')
+    }else{
+        navbar.classList.remove('scrolled')
     }
+})
+// navbar toggle (unified with phrase.php)
+const menuBtn = document.getElementById('menu_btn');
+const navLinks = document.getElementById('nav_links');
+const menuIcon = document.querySelector('.nav_menu i');
 
-    // Function to get daily index
-    function getDailyIndex(length) {
-        const now = new Date();
-        const start = new Date(now.getFullYear(), 0, 0);
-        const diff = now - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        const dayOfYear = Math.floor(diff / oneDay);
-        return dayOfYear % length;
-    }
+if (menuBtn && navLinks && menuIcon) {
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navLinks.classList.toggle('open');
+        const isOpen = navLinks.classList.contains('open');
+        menuIcon.setAttribute('class', isOpen ? 'ri-close-line' : 'ri-menu-line');
+    });
 
-function setPhraseOfTheDay() {
-    if (!items || !items.length) {
-        console.error('No items available to display');
-        useFallbackData();
-        return;
-    }
-    
-    const idx = getDailyIndex(items.length);
-    const entry = items[idx];
-    const phraseEl = document.getElementById('daily-phrase');
-    const translationEl = document.getElementById('daily-translation');
-    const audio = document.getElementById('phrase-audio');
-
-    if (!phraseEl || !translationEl || !audio) {
-        console.error('Required elements not found');
-        return;
-    }
-
-    console.log('Setting phrase:', entry);
-
-    const t = translations[entry.key] || { filipino: '', casiguran_agta: '' };
-    phraseEl.textContent = t.casiguran_agta && t.casiguran_agta.trim().length > 0 
-        ? t.casiguran_agta 
-        : entry.key;
-    
-    const translationParts = [`English: ${entry.key}`];
-    if (t.filipino) translationParts.push(`Filipino: ${t.filipino}`);
-    translationEl.textContent = translationParts.join('  |  ');
-
-    // Handle audio path - properly encode the entire path
-    let audioPath = entry.path.replace(/\\/g, '/'); // Normalize slashes
-    const pathParts = audioPath.split('/');
-    const filename = pathParts.pop(); // Get the filename with spaces
-    const encodedPath = [...pathParts, encodeURIComponent(filename)].join('/');
-    
-    console.log('Loading audio from:', encodedPath);
-
-    // Create a new source element
-    const source = document.createElement('source');
-    source.src = encodedPath;
-    source.type = 'audio/wav';
-    
-    // Clear any existing sources
-    while (audio.firstChild) {
-        audio.removeChild(audio.firstChild);
-    }
-    
-    // Add the new source
-    audio.appendChild(source);
-    
-    // Load the new source
-    audio.load();
-    console.log('Audio source set to:', encodedPath);
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        const clickedInsideMenu = menuBtn.contains(e.target) || navLinks.contains(e.target);
+        if (!clickedInsideMenu && navLinks.classList.contains('open')) {
+            navLinks.classList.remove('open');
+            menuIcon.setAttribute('class', 'ri-menu-line');
+        }
+    });
 }
 
-    function setupPlayButton() {
-        const btn = document.getElementById('phrase-play');
-        const audio = document.getElementById('phrase-audio');
-        const icon = btn.querySelector('i');
-        const labelEl = btn.querySelector('.audio-play-label');
+//Animation
 
-        if (!btn || !audio || !icon) {
-            console.error('Play button or audio element not found');
-            return;
-        }
+const scrollRevealOption = {
+    distance:'50px',
+    origin:'bottom',
+    duration:1000
+}
 
-        function setState(playing) {
-            icon.setAttribute('class', playing ? 'ri-pause-circle-fill' : 'ri-play-circle-fill');
-            btn.setAttribute('aria-label', playing ? 'Pause Audio' : 'Play Audio');
-            btn.title = playing ? 'Pause audio' : 'Play audio';
-            if (labelEl) labelEl.textContent = playing ? 'Pause Audio' : 'Play Audio';
-        }
-
-        // Add error handling
-        audio.addEventListener('error', function(e) {
-    console.error('Audio error:', e);
-    console.error('Audio source:', audio.currentSrc);
-    console.error('Network state:', audio.networkState);
-    console.error('Error state:', audio.error);
-    setState(false);
+ScrollReveal().reveal('.left h1',{
+    ...scrollRevealOption,
+    delay:500,
+});
+ScrollReveal().reveal('.left p',{
+    ...scrollRevealOption,
+    delay:1000,
+});
+ScrollReveal().reveal('.main btn',{
+    ...scrollRevealOption,
+    delay:1500,
+});
+ScrollReveal().reveal('.right img',{
+    ...scrollRevealOption,
+    origin:'right'
+});
+ScrollReveal().reveal('.top_heading',{
+    ...scrollRevealOption,
+    delay:500,
+});
+ScrollReveal().reveal('.heading',{
+    ...scrollRevealOption,
+    delay:500,
+});
+ScrollReveal().reveal('.para',{
+    ...scrollRevealOption,
+    delay:500,
+});
+ScrollReveal().reveal('.box',{
+    ...scrollRevealOption,
+    delay:1000,
+});
+ScrollReveal().reveal('.right_box li',{
+    ...scrollRevealOption,
+    delay:500,
+});
+ScrollReveal().reveal('.box1 .boxes',{
+    ...scrollRevealOption,
+    delay:500,
+});
+ScrollReveal().reveal('.footer_col',{
+    ...scrollRevealOption,
+    delay:500,
 });
 
-        btn.addEventListener('click', async function() {
-    try {
-        if (audio.paused) {
-            // First try to play
-            try {
-                await audio.play();
-                setState(true);
-            } catch (err) {
-                console.error('First play attempt failed, retrying...', err);
-                // Reset the audio element
-                audio.load();
-                // Try playing again after a short delay
-                setTimeout(async () => {
-                    try {
-                        await audio.play();
-                        setState(true);
-                    } catch (e) {
-                        console.error('Second play attempt failed:', e);
-                        setState(false);
-                    }
-                }, 100);
-            }
-        } else {
-            audio.pause();
-            setState(false);
-        }
-    } catch (error) {
-        console.error('Playback error:', error);
-        setState(false);
-    }
-});
-
-        audio.addEventListener('ended', () => setState(false));
-        audio.addEventListener('pause', () => setState(false));
-        audio.addEventListener('play', () => setState(true));
-    }
-
-    // Load phrases from the server
-    fetch('../phpsql/get_phrases.php')
-        .then(response => {
-            console.log('Response status:', response.status);
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.status);
-            }
-            return response.text().then(text => {
-                try {
-                    return text ? JSON.parse(text) : {};
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
-                    console.log('Response text:', text);
-                    throw new Error('Invalid JSON response');
-                }
-            });
-        })
-        .then(data => {
-            console.log('Received data:', data);
-            if (data && data.items && data.items.length > 0) {
-                initPhraseOfTheDay(data.items, data.translations || {});
-            } else {
-                console.log('No phrases found in response, using fallback data');
-                useFallbackData();
-            }
-        })
-        .catch(error => {
-            console.error('Error loading phrases:', error);
-            console.log('Using fallback data due to error');
-            useFallbackData();
-        });
-});

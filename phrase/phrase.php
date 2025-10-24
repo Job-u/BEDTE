@@ -17,9 +17,11 @@
     <link rel="stylesheet" href="../style/story.css">
     <link rel="stylesheet" href="../style/phrase.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css">
+
     <title>Daily Phrase</title>
 </head>
 <body>
+
 
 <nav class="navbar">
         <a href="../userdashboard/userdashboard.php"><div class="logo">
@@ -69,13 +71,17 @@
                         <span class="audio-play-label">Play Audio</span>
                     </button>
                 </div>
-                <audio id="phrase-audio" preload="auto"></audio>
+                <!-- In phrase.php, make sure you have this audio element -->
+<audio id="phrase-audio" preload="auto">
+    <source src="" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
             </div>
         </div>
         
                 
 
-   <!-- This is where the word of the day will be displayed -->
+   
    
 
     </section>

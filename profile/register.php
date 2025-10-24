@@ -1,3 +1,207 @@
+<?php
+session_start();
+include("../phpsql/config.php");
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
+
+function sendVerificationCode($email, $code) {
+    $mail = new PHPMailer(true);
+    try {
+        // Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;  // Disable debug output
+        $mail->isSMTP();                                           
+        $mail->Host       = 'smtp.gmail.com';                     
+        $mail->SMTPAuth   = true;                                
+        $mail->Username   = 'bedteproject@gmail.com';              // REPLACE WITH YOUR GMAIL
+        $mail->Password   = 'bejkmgcdjulpnkwl';        // REPLACE WITH YOUR APP PASSWORD
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            
+        $mail->Port       = 587;                                    
+
+        // Recipients
+        $mail->setFrom('bedteproject@gmail.com', 'BEDTE System');
+        $mail->addAddress($email);
+
+        // Create verification link
+        $verifyLink = "http://" . $_SERVER['HTTP_HOST'] . "/BEDTE_DEMO/profile/verify_code.php?email=" . urlencode($email);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'BEDTE - Verify Your Email';
+        $mail->Body    = "
+            <div style='font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;'>
+                <h2 style='color: #11999E;'>Welcome to BEDTE!</h2>
+                <p>Your verification code is: <strong style='font-size: 24px; color: #11999E;'>$code</strong></p>
+                <p>Click the link below to verify your email:</p>
+                <p><a href='{$verifyLink}' style='background: #11999E; color: white; padding: 10px 20px; text-decoration: none;'>Verify Email</a></p>
+                <p>If you didn't request this code, please ignore this email.</p>
+            </div>";
+
+        $mail->send();
+        
+        // Store email in session before sending any output
+        $_SESSION['verify_email'] = $email;
+        
+        return true;
+    } catch (Exception $e) {
+        error_log("Email sending failed: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+function sendAdminNotification($userEmail, $username, $approvalToken) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'bedteproject@gmail.com';
+        $mail->Password = 'bejkmgcdjulpnkwl';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->setFrom('bedteproject@gmail.com', 'BEDTE System');
+        $mail->addAddress('bedteproject@gmail.com'); // Admin email
+
+        $approveLink = "http://" . $_SERVER['HTTP_HOST'] . "/BEDTE_DEMO/profile/approve_teacher.php?token=" . urlencode($approvalToken) . "&action=approve";
+        $rejectLink = "http://" . $_SERVER['HTTP_HOST'] . "/BEDTE_DEMO/profile/approve_teacher.php?token=" . urlencode($approvalToken) . "&action=reject";
+
+        $mail->isHTML(true);
+        $mail->Subject = 'New Teacher Registration Approval Required';
+        $mail->Body = "
+            <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                <h2>New Teacher Registration Request</h2>
+                <p>A new user has registered as a teacher:</p>
+                <ul>
+                    <li>Username: {$username}</li>
+                    <li>Email: {$userEmail}</li>
+                </ul>
+                <div style='margin: 20px 0;'>
+                    <a href='{$approveLink}' style='background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; margin-right: 10px;'>Approve Teacher</a>
+                    <a href='{$rejectLink}' style='background: #f44336; color: white; padding: 10px 20px; text-decoration: none;'>Reject</a>
+                </div>
+            </div>";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Admin notification error: " . $mail->ErrorInfo);
+        return false;
+    }
+}
+
+// email validation helper
+function is_real_email($email){
+    $email = trim($email);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return false;
+    $parts = explode('@', $email);
+    $domain = array_pop($parts);
+    // Accept if MX exists, otherwise accept if A record exists (local/dev may not have MX)
+    if (checkdnsrr($domain, 'MX') || checkdnsrr($domain, 'A')) return true;
+    return false;
+}
+
+function validatePassword($password) {
+    if(strlen($password) < 8) {
+        return "Password must be at least 8 characters long";
+    }
+    if(!preg_match('/[A-Z]/', $password)) {
+        return "Password must contain at least one capital letter";
+    }
+    return null; // Password is valid
+}
+
+if(isset($_POST['submit'])) {
+    ob_start(); // Start output buffering
+    
+    $username = mysqli_real_escape_string($con, $_POST['username']);
+    $email = mysqli_real_escape_string($con, strtolower(trim($_POST['email'])));
+    $age = mysqli_real_escape_string($con, $_POST['age']);
+    $password = $_POST['password']; // Don't escape before hashing
+    $role = mysqli_real_escape_string($con, $_POST['role']);
+
+    // Validate password
+    $passwordError = validatePassword($password);
+    if($passwordError) {
+        echo "<div class='message error'>$passwordError</div>";
+    } else {
+        // Hash password before storing
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        
+        // Check if email exists
+        $check_email = mysqli_query($con, "SELECT * FROM users WHERE Email='$email'");
+        if(mysqli_num_rows($check_email) > 0) {
+            echo "<div class='message error'>Email already exists!</div>";
+        } else {
+            if($role === 'teacher') {
+                $approval_token = bin2hex(random_bytes(32));
+                $stmt = $con->prepare("INSERT INTO users (Username, Email, Age, Password, Role, approval_token) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssisss", $username, $email, $age, $password_hash, $role, $approval_token);
+                
+                if($stmt->execute() && sendAdminNotification($email, $username, $approval_token)) {
+                    $_SESSION['success_message'] = "Registration submitted! Please wait for admin approval.";
+                } else {
+                    $_SESSION['error_message'] = "Registration failed. Please try again.";
+                }
+            } else {
+                // Student registration
+                $temp_data = [
+                    'username' => $username,
+                    'age' => $age, 
+                    'password' => $password, // Will be hashed during verification
+                    'role' => $role
+                ];
+
+                $verification_code = sprintf('%06d', mt_rand(0, 999999));
+                $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+                $temp_json = json_encode($temp_data);
+
+                $stmt = $con->prepare("INSERT INTO users (
+                    Email, 
+                    verification_code, 
+                    verification_code_expiry,
+                    temp_registration
+                ) VALUES (?, ?, ?, ?)");
+
+                $stmt->bind_param("ssss", 
+                    $email,
+                    $verification_code,
+                    $expiry,
+                    $temp_json
+                );
+                
+                if($stmt->execute() && sendVerificationCode($email, $verification_code)) {
+                    $_SESSION['verify_email'] = $email;
+                    header("Location: verify_code.php");
+                    ob_end_flush();
+                    exit();
+                } else {
+                    $_SESSION['error_message'] = "Registration failed. Please try again.";
+                }
+            }
+        }
+    }
+    
+    ob_end_flush();
+}
+
+// Example insertion point: validate age before inserting user
+if(isset($_POST['submit'])) {
+    // ...other validation...
+    $age = isset($_POST['age']) ? (int)$_POST['age'] : 0;
+
+    if ($age <= 0) {
+        $error_message = "Please enter a valid age.";
+    } elseif ($age > 100) {
+        $error_message = "Please enter a realistic age (100 or less).";
+    } else {
+
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -274,121 +478,99 @@
             }
         }
 
+        .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
 
+    .message {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .message.error {
+        background-color: #ffe6e6;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
+    .message.success {
+        background-color: #e6ffe6;
+        color: #28a745;
+        border: 1px solid #28a745;
+    }
 
     </style>
 </head>
 <body>
-      <div class="container">
-        <div class="box form-box">
-
-        <?php 
-         
-         include("../phpsql/config.php");
-         if(isset($_POST['submit'])){
-            if(!isset($_POST['terms_accepted'])){
-                echo "<div class='message'>
-                      <p>You must accept the terms and conditions to register.</p>
-                  </div> <br>";
-                echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
-            } else {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $age = $_POST['age'];
-            $password = $_POST['password'];
-            $confirm_password = $_POST['confirm_password'];
-            $role = $_POST['role'];
-
-         //--- VALIDATION ADDED ---
-
-         // 1. Validate Email Format
-         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo "<div class='message'>
-                      <p>Please enter a valid email address!</p>
-                  </div> <br>";
-            echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
-         }
-         // 2. Validate Password Strength
-         else if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password)) {
-            echo "<div class='message'>
-                      <p>Password must be at least 8 characters and contain at least one capital letter.</p>
-                  </div> <br>";
-            echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
-         }
-         else if ($password !== $confirm_password ) {
-            echo "<div class='message'>
-                         <p>Password and confirm password do not match.</p>
-                      </div> <br>";
-            echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
-         }
-
-         else {
-             // verifying the unique email
-             $verify_query = mysqli_query($con,"SELECT Email FROM users WHERE Email='$email'");
-
-             if(mysqli_num_rows($verify_query) !=0 ){
-                echo "<div class='message'>
-                          <p>This email is used, Try another One Please!</p>
-                      </div> <br>";
-                echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
-             }
-             else{
-    
-                mysqli_query($con,"INSERT INTO users(Username,Email,Age,Password,Role) VALUES('$username','$email','$age','$password','$role')") or die("Error Occured");
-    
-                echo "<div class='message'>
-                          <p>Registration successfully!</p>
-                      </div> <br>";
-                echo "<a href='login.php'><button class='btn'>Login Now</button>";
-             
-    
-             }
-         }
-        }
-         }else{
-         
-        ?>
-
-            <header>Sign Up</header>
-            <form action="" method="post">
-                <div class="field input">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" autocomplete="off" required>
+    <div class="container">
+        <?php if(isset($_SESSION['success_message'])): ?>
+            <div class="box form-box">
+                <a class="home-btn" href="../homepage.html">← Home</a>
+                <header>Registration Status</header>
+                <div class="message success">
+                    <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
                 </div>
-
-                <div class="field input">
-                    <label for="email">Email</label>
-                    <input type="text" name="email" id="email" autocomplete="off" required>
+                <div class="field" style="text-align:center; margin-top:20px;">
+                    <a href="login.php" class="btn" style="display:inline-block; text-decoration:none;">
+                        Go to Login
+                    </a>
                 </div>
-
-                <div class="field input">
-                    <label for="age">Age</label>
-                    <input type="number" name="age" id="age" autocomplete="off" required>
-                </div>
-                <div class="field input">
-                    <label for="role">Register as:</label>
-                    <select name="role" id="role" required>
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                    </select>
-                </div>
-                <div class="field input">
-                    <label for="password">Password</label>
-                    <div class="password-wrapper">
-                    <input type="password" name="password" id="password" autocomplete="off" required>
-                    <i class="ri-eye-off-line togglePassword" id="togglePassword"></i>
+            </div>
+        <?php else: ?>
+            <div class="box form-box">
+                <a class="home-btn" href="../homepage.html">← Home</a>
+                <header>Sign Up</header>
+                
+                <?php if(isset($_SESSION['error_message'])): ?>
+                    <div class="message error"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
+                <?php endif; ?>
+                
+                <form action="" method="post">
+                    <div class="field input">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" autocomplete="off" required>
                     </div>
-                    <small id="passwordHelp">Must be at least 8 characters and contain one capital letter.</small>
-                </div>
-                <div class="field input">
-                    <label for="confirm_password">Confirm Password</label>
-                    <div class="password-wrapper">
-                    <input type="password" name="confirm_password" id="confirm_password" autocomplete="off" required>
-                    <i class="ri-eye-off-line togglePassword" id="toggleConfirmPassword"></i>
-                    </div>
-                </div>
 
-                <div class="field terms-field">
+                    <div class="field input">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" id="email" autocomplete="off" required>
+                    </div>
+
+                    <div class="field input">
+                        <label for="age">Age</label>
+                        <input type="number" name="age" id="age" min="1" max="100" autocomplete="off" required>
+                        
+                    </div>
+                    <div class="field input">
+                        <label for="role">Register as:</label>
+                        <select name="role" id="role" required>
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
+                    <div class="field input">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                        <input type="password" name="password" id="password" autocomplete="off" required>
+                        <i class="ri-eye-off-line togglePassword" id="togglePassword"></i>
+                        </div>
+                        <small id="passwordHelp">Must be at least 8 characters and contain one capital letter.</small>
+                    </div>
+                    <div class="field input">
+                        <label for="confirm_password">Confirm Password</label>
+                        <div class="password-wrapper">
+                        <input type="password" name="confirm_password" id="confirm_password" autocomplete="off" required>
+                        <i class="ri-eye-off-line togglePassword" id="toggleConfirmPassword"></i>
+                        </div>
+                    </div>
+
+                    <div class="field terms-field">
     <div class="terms-checkbox">
         <input type="checkbox" name="terms_accepted" id="terms_accepted" disabled>
         <label for="terms_accepted">I agree to the</label>
@@ -396,16 +578,16 @@
     </div>
 </div>
 
-                <div class="field">
-                    <input type="submit" class="btn" name="submit" value="Register" id="registerBtn" disabled>
-                </div>
-                <div class="links">
-                    Already a member? <a href="login.php">Sign In</a>
-                </div>
-            </form>
-        </div>
-        <?php } ?>
-      </div>
+                    <div class="field">
+                        <input type="submit" class="btn" name="submit" value="Register" id="registerBtn" disabled>
+                    </div>
+                    <div class="links">
+                        Already a member? <a href="login.php">Sign In</a>
+                    </div>
+                </form>
+            </div>
+        <?php endif; ?>
+    </div>
 
       <!-- Terms and Conditions Modal -->
     <div class="terms-modal" id="termsModal">

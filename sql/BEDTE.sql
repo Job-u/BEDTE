@@ -32,3 +32,17 @@ CREATE TABLE question_options (
     option_text TEXT NOT NULL,
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `phrases` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `english` varchar(255) NOT NULL,
+  `casiguran_agta` varchar(255) NOT NULL,
+  `filipino` varchar(255) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `audio_path` varchar(500) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category` (`category`),
+  KEY `created_by` (`created_by`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

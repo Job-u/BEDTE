@@ -109,6 +109,12 @@ include("../phpsql/config.php");
                     <p>Add or modify game questions</p>
                 </a>
 
+                <a href="manage_phrases.php" class="action-card">
+                <i class="ri-edit-box-line"></i>
+                <h3>Manage Phrases</h3>
+                <p>Add new phrases, update translations, or delete old ones</p>
+                </a>
+
 
             <!-- Recent Activity -->
             <div class="recent-activity">
