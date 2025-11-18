@@ -1,4 +1,8 @@
+
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 include("../phpsql/config.php");
 use PHPMailer\PHPMailer\PHPMailer;
@@ -11,21 +15,21 @@ function sendVerificationCode($email, $code) {
     $mail = new PHPMailer(true);
     try {
         // Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_OFF;  // Disable debug output
-        $mail->isSMTP();                                           
-        $mail->Host       = 'smtp.gmail.com';                     
-        $mail->SMTPAuth   = true;                                
-        $mail->Username   = 'bedteproject@gmail.com';              // REPLACE WITH YOUR GMAIL
-        $mail->Password   = 'bejkmgcdjulpnkwl';        // REPLACE WITH YOUR APP PASSWORD
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            
-        $mail->Port       = 587;                                    
+$mail->isSMTP();
+$mail->Host = 'smtp-relay.brevo.com';
+$mail->SMTPAuth = true;
+$mail->Username = '99ac43001@smtp-brevo.com';  // your Brevo login from step 1
+$mail->Password = '9LS7fbEMrhXzHyqj';          // your Brevo SMTP password
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+$mail->Port = 587;
+                                 
 
         // Recipients
         $mail->setFrom('bedteproject@gmail.com', 'BEDTE System');
         $mail->addAddress($email);
 
         // Create verification link
-        $verifyLink = "http://" . $_SERVER['HTTP_HOST'] . "/BEDTE_DEMO/profile/verify_code.php?email=" . urlencode($email);
+        $verifyLink = "http://" . $_SERVER['HTTP_HOST'] . "/profile/verify_code.php?email=" . urlencode($email);
 
         // Content
         $mail->isHTML(true);
@@ -54,19 +58,20 @@ function sendVerificationCode($email, $code) {
 function sendAdminNotification($userEmail, $username, $approvalToken) {
     $mail = new PHPMailer(true);
     try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'bedteproject@gmail.com';
-        $mail->Password = 'bejkmgcdjulpnkwl';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
+        // Server settings
+$mail->isSMTP();
+$mail->Host = 'smtp-relay.brevo.com';
+$mail->SMTPAuth = true;
+$mail->Username = '99ac43001@smtp-brevo.com';  // your Brevo login from step 1
+$mail->Password = '9LS7fbEMrhXzHyqj';          // your Brevo SMTP password
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+$mail->Port = 587;
 
         $mail->setFrom('bedteproject@gmail.com', 'BEDTE System');
         $mail->addAddress('bedteproject@gmail.com'); // Admin email
 
-        $approveLink = "http://" . $_SERVER['HTTP_HOST'] . "/BEDTE_DEMO/profile/approve_teacher.php?token=" . urlencode($approvalToken) . "&action=approve";
-        $rejectLink = "http://" . $_SERVER['HTTP_HOST'] . "/BEDTE_DEMO/profile/approve_teacher.php?token=" . urlencode($approvalToken) . "&action=reject";
+        $approveLink = "http://" . $_SERVER['HTTP_HOST'] . "/profile/approve_teacher.php?token=" . urlencode($approvalToken) . "&action=approve";
+        $rejectLink = "http://" . $_SERVER['HTTP_HOST'] . "/profile/approve_teacher.php?token=" . urlencode($approvalToken) . "&action=reject";
 
         $mail->isHTML(true);
         $mail->Subject = 'New Teacher Registration Approval Required';
@@ -93,14 +98,42 @@ function sendAdminNotification($userEmail, $username, $approvalToken) {
 }
 
 // email validation helper
-function is_real_email($email){
-    $email = trim($email);
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return false;
+function is_real_email($email) {
+    $email = trim(strtolower($email));
+
+    // 1. Basic format check
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+
+    // 2. No consecutive dots anywhere
+    if (preg_match('/\.\./', $email)) {
+        return false;
+    }
+
+    // 3. Prevent double domain endings like .com.com, .org.org, .edu.edu, etc.
+    if (preg_match('/\.(com|org|net|edu|gov|mil|int|co|ph)\.\1$/i', $email)) {
+        return false;
+    }
+
+    // 4. Prevent double TLD of any kind (like .ph.ph)
+    if (preg_match('/\.[a-z]{2,}\.[a-z]{2,}$/i', $email)) {
+        // Only allow known 2-part TLDs like .com.ph, .edu.ph, etc.
+        $allowed_tlds = ['com.ph', 'net.ph', 'org.ph', 'edu.ph'];
+        $tld = substr(strrchr($email, '.'), 1);
+        if (!in_array($tld, $allowed_tlds)) {
+            return false;
+        }
+    }
+
+    // 5. Validate domain existence (optional but good)
     $parts = explode('@', $email);
     $domain = array_pop($parts);
-    // Accept if MX exists, otherwise accept if A record exists (local/dev may not have MX)
-    if (checkdnsrr($domain, 'MX') || checkdnsrr($domain, 'A')) return true;
-    return false;
+    if (!checkdnsrr($domain, 'MX') && !checkdnsrr($domain, 'A')) {
+        return false;
+    }
+
+    return true;
 }
 
 function validatePassword($password) {
@@ -113,89 +146,104 @@ function validatePassword($password) {
     return null; // Password is valid
 }
 
-if(isset($_POST['submit'])) {
-    ob_start(); // Start output buffering
-    
+if (isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($con, $_POST['username']);
     $email = mysqli_real_escape_string($con, strtolower(trim($_POST['email'])));
     $age = mysqli_real_escape_string($con, $_POST['age']);
-    $password = $_POST['password']; // Don't escape before hashing
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
     $role = mysqli_real_escape_string($con, $_POST['role']);
 
-    // Validate password
+    // ✅ Email validation
+    if (!is_real_email($email)) {
+        $_SESSION['error_message'] = "Invalid email format! Please enter a valid email.";
+        header("Location: register.php");
+        exit();
+    }
+
+    // ✅ Password validation
     $passwordError = validatePassword($password);
-    if($passwordError) {
-        echo "<div class='message error'>$passwordError</div>";
-    } else {
-        // Hash password before storing
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        
-        // Check if email exists
-        $check_email = mysqli_query($con, "SELECT * FROM users WHERE Email='$email'");
-        if(mysqli_num_rows($check_email) > 0) {
-            echo "<div class='message error'>Email already exists!</div>";
+    if ($passwordError) {
+        $_SESSION['error_message'] = $passwordError;
+        header("Location: register.php");
+        exit();
+    }
+
+    if ($password !== $confirm_password) {
+        $_SESSION['error_message'] = "Passwords do not match!";
+        header("Location: register.php");
+        exit();
+    }
+
+    // ✅ Age validation
+    if ($age <= 0 || $age > 100) {
+        $_SESSION['error_message'] = "Please enter a valid age between 1 and 100.";
+        header("Location: register.php");
+        exit();
+    }
+
+    // ✅ Hash password
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+    // ✅ Check if email already exists
+    $check_email = mysqli_query($con, "SELECT * FROM users WHERE Email='$email'");
+    if (mysqli_num_rows($check_email) > 0) {
+        $_SESSION['error_message'] = "Email already exists!";
+        header("Location: register.php");
+        exit();
+    }
+
+    
+    if ($role === 'teacher') {
+        $approval_token = bin2hex(random_bytes(32));
+        $stmt = $con->prepare("INSERT INTO users (Username, Email, Age, Password, Role, approval_token) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssisss", $username, $email, $age, $password_hash, $role, $approval_token);
+
+        if ($stmt->execute() && sendAdminNotification($email, $username, $approval_token)) {
+            $_SESSION['success_message'] = "Registration submitted! Please wait for admin approval.";
         } else {
-            if($role === 'teacher') {
-                $approval_token = bin2hex(random_bytes(32));
-                $stmt = $con->prepare("INSERT INTO users (Username, Email, Age, Password, Role, approval_token) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssisss", $username, $email, $age, $password_hash, $role, $approval_token);
-                
-                if($stmt->execute() && sendAdminNotification($email, $username, $approval_token)) {
-                    $_SESSION['success_message'] = "Registration submitted! Please wait for admin approval.";
-                } else {
-                    $_SESSION['error_message'] = "Registration failed. Please try again.";
-                }
-            } else {
-                // Student registration
-                $temp_data = [
-                    'username' => $username,
-                    'age' => $age, 
-                    'password' => $password, // Will be hashed during verification
-                    'role' => $role
-                ];
+            $_SESSION['error_message'] = "Registration failed. Please try again.";
+        }
+        header("Location: register.php");
+        exit();
+    } else {
+        
+        $temp_data = [
+            'username' => $username,
+            'age' => $age,
+            'password' => $password,
+            'role' => $role
+        ];
 
-                $verification_code = sprintf('%06d', mt_rand(0, 999999));
-                $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
-                $temp_json = json_encode($temp_data);
+        $verification_code = sprintf('%06d', mt_rand(0, 999999));
+        $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $temp_json = json_encode($temp_data);
 
-                $stmt = $con->prepare("INSERT INTO users (
-                    Email, 
-                    verification_code, 
-                    verification_code_expiry,
-                    temp_registration
-                ) VALUES (?, ?, ?, ?)");
+        $stmt = $con->prepare("INSERT INTO users (Email, verification_code, verification_code_expiry, temp_registration) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $email, $verification_code, $expiry, $temp_json);
 
-                $stmt->bind_param("ssss", 
-                    $email,
-                    $verification_code,
-                    $expiry,
-                    $temp_json
-                );
-                
-                if($stmt->execute() && sendVerificationCode($email, $verification_code)) {
-                    $_SESSION['verify_email'] = $email;
-                    header("Location: verify_code.php");
-                    ob_end_flush();
-                    exit();
-                } else {
-                    $_SESSION['error_message'] = "Registration failed. Please try again.";
-                }
-            }
+        if ($stmt->execute() && sendVerificationCode($email, $verification_code)) {
+            $_SESSION['verify_email'] = $email;
+            header("Location: verify_code.php");
+            exit();
+        } else {
+            $_SESSION['error_message'] = "Registration failed. Please try again.";
+            header("Location: register.php");
+            exit();
         }
     }
-    
-    ob_end_flush();
 }
 
-// Example insertion point: validate age before inserting user
+
+
 if(isset($_POST['submit'])) {
-    // ...other validation...
+    
     $age = isset($_POST['age']) ? (int)$_POST['age'] : 0;
 
     if ($age <= 0) {
         $error_message = "Please enter a valid age.";
     } elseif ($age > 100) {
-        $error_message = "Please enter a realistic age (100 or less).";
+        $error_message = "Please input a valid age.";
     } else {
 
     }
@@ -511,7 +559,7 @@ if(isset($_POST['submit'])) {
     <div class="container">
         <?php if(isset($_SESSION['success_message'])): ?>
             <div class="box form-box">
-                <a class="home-btn" href="../homepage.html">← Home</a>
+                <a class="home-btn" href="../index.html">← Home</a>
                 <header>Registration Status</header>
                 <div class="message success">
                     <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
@@ -524,7 +572,7 @@ if(isset($_POST['submit'])) {
             </div>
         <?php else: ?>
             <div class="box form-box">
-                <a class="home-btn" href="../homepage.html">← Home</a>
+                <a class="home-btn" href="../index.html">← Home</a>
                 <header>Sign Up</header>
                 
                 <?php if(isset($_SESSION['error_message'])): ?>
@@ -772,3 +820,4 @@ if(isset($_POST['submit'])) {
 
 </body>
 </html>
+    

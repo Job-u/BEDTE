@@ -6,9 +6,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require '../vendor/autoload.php';
 
-if(!isset($_SESSION['valid']) || $_SESSION['role'] !== 'teacher'){ header("Location: login.php"); exit(); }
+if(!isset($_SESSION['valid'])){ header("Location: login.php"); exit(); }
 
-// Reuse the same logic as edit.php but scoped to teachers
 function mask_email($email){
     if (!$email) return '';
     $parts = explode('@', $email);
@@ -47,6 +46,7 @@ function sendNewEmailVerification($toEmail, $code){
 }
 
 $id = (int)$_SESSION['id'];
+// fetch current data for display
 $query = mysqli_query($con, "SELECT * FROM users WHERE Id=$id");
 $result = mysqli_fetch_assoc($query);
 $displayEmail = mask_email($result['Email'] ?? '');
@@ -61,10 +61,12 @@ if(isset($_POST['submit'])) {
     $new_password = isset($_POST['new_password']) ? trim($_POST['new_password']) : '';
     $confirm_password = isset($_POST['confirm_password']) ? trim($_POST['confirm_password']) : '';
 
+    // Age validation
     if ($age <= 0 || $age > 100) {
-        $error = "Please enter a realistic age (1 - 100).";
+        $error = "Please input a valid age.";
     }
 
+    // Password validation
     if (!$error && $new_password !== '') {
         if (strlen($new_password) < 8 || !preg_match('/[A-Z]/', $new_password)) {
             $error = "Password must be at least 8 characters and contain at least one capital letter.";
@@ -73,48 +75,46 @@ if(isset($_POST['submit'])) {
         }
     }
 
+    // Email change handling
     if (!$error) {
         $current = mysqli_fetch_assoc(mysqli_query($con, "SELECT Email FROM users WHERE Id=$id"));
-        $currentEmail = strtolower(trim($current['Email'] ?? '')); 
+        $currentEmail = strtolower(trim($current['Email'] ?? ''));
 
-        if ($email_input !== '' && $email_input !== $currentEmail) {
-            if (!filter_var($email_input, FILTER_VALIDATE_EMAIL)) {
-                $error = "Please enter a valid email address.";
-                $email_indicator = 'invalid';
-            } else {
-                $domain = substr(strrchr($email_input, "@"), 1);
-                $dns_ok = (checkdnsrr($domain, 'MX') || checkdnsrr($domain, 'A'));
-                if (!$dns_ok) {
-                    $error = "Provided email domain may not be deliverable.";
-                    $email_indicator = 'invalid';
-                }
-            }
+if ($email_input !== '' && $email_input !== $currentEmail) {
+    // Validate format using your custom function
+    if (!is_real_email($email_input)) {
+        $error = "Invalid email format! Please enter a valid and deliverable email.";
+        $email_indicator = 'invalid';
+    }
 
-            if (!$error) {
-                $uq = $con->prepare("SELECT Id FROM users WHERE (LOWER(Email)=? OR LOWER(new_email)=?) AND Id <> ?");
-                $email_norm = strtolower($email_input);
-                $uq->bind_param("ssi", $email_norm, $email_norm, $id);
-                $uq->execute();
-                $uqres = $uq->get_result();
-                if ($uqres && $uqres->num_rows > 0) {
-                    $error = "That email is already in use, please choose another.";
-                    $email_indicator = 'taken';
-                }
-            }
-
-            if (!$error) {
-                $code = sprintf('%06d', mt_rand(0,999999));
-                $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
-                $stmt = $con->prepare("UPDATE users SET new_email = ?, new_email_verification_code = ?, new_email_verification_expiry = ? WHERE Id = ?");
-                $stmt->bind_param("sssi", $email_input, $code, $expiry, $id);
-                if($stmt->execute() && sendNewEmailVerification($email_input, $code)) {
-                    $msg = "A verification code was sent to your NEW email. Complete verification to apply the change.";
-                } else {
-                    $error = "Failed to send verification to new email.";
-                }
-            }
+    // Uniqueness check (do not allow if Email or new_email already used by another account)
+    if (!$error) {
+        $uq = $con->prepare("SELECT Id FROM users WHERE (LOWER(Email)=? OR LOWER(new_email)=?) AND Id <> ?");
+        $email_norm = strtolower($email_input);
+        $uq->bind_param("ssi", $email_norm, $email_norm, $id);
+        $uq->execute();
+        $uqres = $uq->get_result();
+        if ($uqres && $uqres->num_rows > 0) {
+            $error = "That email is already in use, please choose another.";
+            $email_indicator = 'taken';
         }
+    }
 
+    // If all good, create verification for new email
+    if (!$error) {
+        $code = sprintf('%06d', mt_rand(0,999999));
+        $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $stmt = $con->prepare("UPDATE users SET new_email = ?, new_email_verification_code = ?, new_email_verification_expiry = ? WHERE Id = ?");
+        $stmt->bind_param("sssi", $email_input, $code, $expiry, $id);
+        if($stmt->execute() && sendNewEmailVerification($email_input, $code)) {
+            $msg = "A verification code was sent to your NEW email. Complete verification to apply the change.";
+        } else {
+            $error = "Failed to send verification to new email.";
+        }
+    }
+}
+
+        // Update username/age and password immediately (email change will apply after verification)
         if (!$error) {
             $update_sql = "UPDATE users SET Username=?, Age=?";
             $params = [$username, $age];
@@ -133,6 +133,7 @@ if(isset($_POST['submit'])) {
             $stmt2->bind_param($types, ...$params);
             if($stmt2->execute()) {
                 if(!$msg) $msg = "Profile updated.";
+                // refresh displayed data
                 $query = mysqli_query($con, "SELECT * FROM users WHERE Id=$id");
                 $result = mysqli_fetch_assoc($query);
                 $displayEmail = mask_email($result['Email'] ?? '');
@@ -169,13 +170,14 @@ if(isset($_POST['submit'])) {
 .email-indicator { font-size:0.9rem; margin-top:6px; }
 .email-indicator.taken { color:#d9534f; }
 .email-indicator.invalid { color:#f0ad4e; }
+.small-help { font-size:0.9rem; margin-top:4px; }
 </style>
 </head>
 <body>
 <section class="sec">
 <div class="container">
     <div class="box form-box">
-        <a class="back-link" href="../teacherdashboard/teacherdashboard.php">← Back</a>
+        <a class="back-link" href="../userdashboard/userdashboard.php">← Back</a>
         <?php if($error) echo "<div class='message error'>".htmlspecialchars($error)."</div>";
               if($msg) echo "<div class='message success'>".htmlspecialchars($msg)."</div>"; ?>
 
@@ -210,7 +212,7 @@ if(isset($_POST['submit'])) {
                 <input type="number" name="age" value="<?php echo (int)($result['Age'] ?? ''); ?>" required min="1" max="100">
             </div>
 
-
+ 
                 <div class="left-col">
                     <div class="field input">
                         <label>New Password (optional)</label>

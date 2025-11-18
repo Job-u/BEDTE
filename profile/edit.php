@@ -63,7 +63,7 @@ if(isset($_POST['submit'])) {
 
     // Age validation
     if ($age <= 0 || $age > 100) {
-        $error = "Please enter a realistic age (1 - 100).";
+        $error = "Please input a valid age.";
     }
 
     // Password validation
@@ -80,47 +80,39 @@ if(isset($_POST['submit'])) {
         $current = mysqli_fetch_assoc(mysqli_query($con, "SELECT Email FROM users WHERE Id=$id"));
         $currentEmail = strtolower(trim($current['Email'] ?? ''));
 
-        if ($email_input !== '' && $email_input !== $currentEmail) {
-            // Validate format
-            if (!filter_var($email_input, FILTER_VALIDATE_EMAIL)) {
-                $error = "Please enter a valid email address.";
-                $email_indicator = 'invalid';
-            } else {
-                // Basic deliverability check (may be disabled on some hosts)
-                $domain = substr(strrchr($email_input, "@"), 1);
-                $dns_ok = (checkdnsrr($domain, 'MX') || checkdnsrr($domain, 'A'));
-                if (!$dns_ok) {
-                    $error = "Provided email domain may not be deliverable.";
-                    $email_indicator = 'invalid';
-                }
-            }
+if ($email_input !== '' && $email_input !== $currentEmail) {
+    // Validate format using your custom function
+    if (!is_real_email($email_input)) {
+        $error = "Invalid email format! Please enter a valid and deliverable email.";
+        $email_indicator = 'invalid';
+    }
 
-            // Uniqueness check (do not allow if Email or new_email already used by another account)
-            if (!$error) {
-                $uq = $con->prepare("SELECT Id FROM users WHERE (LOWER(Email)=? OR LOWER(new_email)=?) AND Id <> ?");
-                $email_norm = strtolower($email_input);
-                $uq->bind_param("ssi", $email_norm, $email_norm, $id);
-                $uq->execute();
-                $uqres = $uq->get_result();
-                if ($uqres && $uqres->num_rows > 0) {
-                    $error = "That email is already in use, please choose another.";
-                    $email_indicator = 'taken';
-                }
-            }
-
-            // If all good, create verification for new email
-            if (!$error) {
-                $code = sprintf('%06d', mt_rand(0,999999));
-                $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
-                $stmt = $con->prepare("UPDATE users SET new_email = ?, new_email_verification_code = ?, new_email_verification_expiry = ? WHERE Id = ?");
-                $stmt->bind_param("sssi", $email_input, $code, $expiry, $id);
-                if($stmt->execute() && sendNewEmailVerification($email_input, $code)) {
-                    $msg = "A verification code was sent to your NEW email. Complete verification to apply the change.";
-                } else {
-                    $error = "Failed to send verification to new email.";
-                }
-            }
+    // Uniqueness check (do not allow if Email or new_email already used by another account)
+    if (!$error) {
+        $uq = $con->prepare("SELECT Id FROM users WHERE (LOWER(Email)=? OR LOWER(new_email)=?) AND Id <> ?");
+        $email_norm = strtolower($email_input);
+        $uq->bind_param("ssi", $email_norm, $email_norm, $id);
+        $uq->execute();
+        $uqres = $uq->get_result();
+        if ($uqres && $uqres->num_rows > 0) {
+            $error = "That email is already in use, please choose another.";
+            $email_indicator = 'taken';
         }
+    }
+
+    // If all good, create verification for new email
+    if (!$error) {
+        $code = sprintf('%06d', mt_rand(0,999999));
+        $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $stmt = $con->prepare("UPDATE users SET new_email = ?, new_email_verification_code = ?, new_email_verification_expiry = ? WHERE Id = ?");
+        $stmt->bind_param("sssi", $email_input, $code, $expiry, $id);
+        if($stmt->execute() && sendNewEmailVerification($email_input, $code)) {
+            $msg = "A verification code was sent to your NEW email. Complete verification to apply the change.";
+        } else {
+            $error = "Failed to send verification to new email.";
+        }
+    }
+}
 
         // Update username/age and password immediately (email change will apply after verification)
         if (!$error) {
