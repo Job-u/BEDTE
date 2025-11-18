@@ -177,7 +177,7 @@ if ($email_input !== '' && $email_input !== $currentEmail) {
 <section class="sec">
 <div class="container">
     <div class="box form-box">
-        <a class="back-link" href="../userdashboard/userdashboard.php">← Back</a>
+        <a class="back-link" href="../teacherdashboard/teacherdashboard.php">← Back</a>
         <?php if($error) echo "<div class='message error'>".htmlspecialchars($error)."</div>";
               if($msg) echo "<div class='message success'>".htmlspecialchars($msg)."</div>"; ?>
 
